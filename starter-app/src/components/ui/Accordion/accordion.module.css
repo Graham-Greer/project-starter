@@ -21,7 +21,7 @@
   gap: var(--space-4);
   padding: var(--space-4) var(--space-5);
   border: 0;
-  background: transparent;
+  background: var(--surface-1);
   color: var(--text-primary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
@@ -48,19 +48,42 @@
 }
 
 .panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
   border-top: var(--space-px) solid transparent;
+  transition: grid-template-rows 0.24s ease-in-out, border-top-color 0.2s ease-in-out;
 }
 
 .panelOpen {
+  grid-template-rows: 1fr;
   border-top-color: var(--border-subtle);
 }
 
 .panelInner {
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface-muted);
+  padding: 0 var(--space-5);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, padding 0.24s ease-in-out;
+}
+
+.panelOpen .panelInner {
   padding: var(--space-4) var(--space-5);
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .chevron {
+    transition: none;
+  }
+
+  .panel {
+    transition: none;
+  }
+
+  .panelInner {
     transition: none;
   }
 }

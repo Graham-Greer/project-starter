@@ -1,5 +1,6 @@
 .root {
   max-width: 48rem;
+  margin-bottom: var(--space-6);
 }
 
 .left {

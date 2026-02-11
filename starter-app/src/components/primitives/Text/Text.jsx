@@ -22,6 +22,7 @@ const TONE_MAP = {
   secondary: "var(--text-secondary)",
   muted: "var(--text-muted)",
   inverse: "var(--text-inverse)",
+  onMedia: "var(--color-neutral-50)",
 };
 
 export default function Text({

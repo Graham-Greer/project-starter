@@ -5,9 +5,9 @@
 
 .inner {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: var(--space-8) clamp(var(--space-6), 6vw, var(--space-16));
+  padding: var(--space-8) clamp(var(--space-4), 4vw, var(--space-8));
   display: flex;
   justify-content: space-between;
   gap: var(--space-4);

@@ -53,85 +53,109 @@
 }
 
 .primary.neutral {
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
+  background: var(--context-button-neutral-primary-bg, var(--button-neutral-primary-bg));
+  color: var(--context-button-neutral-primary-text, var(--button-neutral-primary-text));
+  border-color: var(--context-button-neutral-primary-border, var(--button-neutral-primary-border));
 }
 
 .primary.neutral:hover {
-  background: var(--button-primary-hover);
+  background: var(--context-button-neutral-primary-hover-bg, var(--button-neutral-primary-hover-bg));
+  color: var(--context-button-neutral-primary-hover-text, var(--button-neutral-primary-hover-text));
+  border-color: var(--context-button-neutral-primary-hover-border, var(--button-neutral-primary-hover-border));
 }
 
 .secondary.neutral {
-  background: transparent;
-  color: var(--text-primary);
-  border-color: var(--button-secondary-border);
+  background: var(--context-button-neutral-secondary-bg, var(--button-neutral-secondary-bg));
+  color: var(--context-button-neutral-secondary-text, var(--button-neutral-secondary-text));
+  border-color: var(--context-button-neutral-secondary-border, var(--button-neutral-secondary-border));
 }
 
 .secondary.neutral:hover {
-  background: var(--button-secondary-bg-hover);
+  background: var(--context-button-neutral-secondary-hover-bg, var(--button-neutral-secondary-hover-bg));
+  color: var(--context-button-neutral-secondary-hover-text, var(--button-neutral-secondary-hover-text));
+  border-color: var(--context-button-neutral-secondary-hover-border, var(--button-neutral-secondary-hover-border));
 }
 
 .tertiary.neutral {
-  background: transparent;
-  color: var(--text-primary);
+  background: var(--context-button-neutral-tertiary-bg, var(--button-neutral-tertiary-bg));
+  color: var(--context-button-neutral-tertiary-text, var(--button-neutral-tertiary-text));
+  border-color: var(--context-button-neutral-tertiary-border, var(--button-neutral-tertiary-border));
 }
 
 .tertiary.neutral:hover {
-  background: var(--surface-2);
+  background: var(--context-button-neutral-tertiary-hover-bg, var(--button-neutral-tertiary-hover-bg));
+  color: var(--context-button-neutral-tertiary-hover-text, var(--button-neutral-tertiary-hover-text));
+  border-color: var(--context-button-neutral-tertiary-hover-border, var(--button-neutral-tertiary-hover-border));
 }
 
 .primary.brand {
-  background: var(--color-primary-600);
-  color: var(--text-inverse);
+  background: var(--context-button-brand-primary-bg, var(--button-brand-primary-bg));
+  color: var(--context-button-brand-primary-text, var(--button-brand-primary-text));
+  border-color: var(--context-button-brand-primary-border, var(--button-brand-primary-border));
 }
 
 .primary.brand:hover {
-  background: var(--color-primary-700);
+  background: var(--context-button-brand-primary-hover-bg, var(--button-brand-primary-hover-bg));
+  color: var(--context-button-brand-primary-hover-text, var(--button-brand-primary-hover-text));
+  border-color: var(--context-button-brand-primary-hover-border, var(--button-brand-primary-hover-border));
 }
 
 .secondary.brand {
-  background: transparent;
-  color: var(--color-primary-600);
-  border-color: var(--color-primary-300);
+  background: var(--context-button-brand-secondary-bg, var(--button-brand-secondary-bg));
+  color: var(--context-button-brand-secondary-text, var(--button-brand-secondary-text));
+  border-color: var(--context-button-brand-secondary-border, var(--button-brand-secondary-border));
 }
 
 .secondary.brand:hover {
-  background: var(--color-primary-50);
+  background: var(--context-button-brand-secondary-hover-bg, var(--button-brand-secondary-hover-bg));
+  color: var(--context-button-brand-secondary-hover-text, var(--button-brand-secondary-hover-text));
+  border-color: var(--context-button-brand-secondary-hover-border, var(--button-brand-secondary-hover-border));
 }
 
 .tertiary.brand {
-  background: transparent;
-  color: var(--color-primary-600);
+  background: var(--context-button-brand-tertiary-bg, var(--button-brand-tertiary-bg));
+  color: var(--context-button-brand-tertiary-text, var(--button-brand-tertiary-text));
+  border-color: var(--context-button-brand-tertiary-border, var(--button-brand-tertiary-border));
 }
 
 .tertiary.brand:hover {
-  background: var(--color-primary-50);
+  background: var(--context-button-brand-tertiary-hover-bg, var(--button-brand-tertiary-hover-bg));
+  color: var(--context-button-brand-tertiary-hover-text, var(--button-brand-tertiary-hover-text));
+  border-color: var(--context-button-brand-tertiary-hover-border, var(--button-brand-tertiary-hover-border));
 }
 
 .primary.danger {
-  background: var(--color-danger);
-  color: var(--text-inverse);
+  background: var(--context-button-danger-primary-bg, var(--button-danger-primary-bg));
+  color: var(--context-button-danger-primary-text, var(--button-danger-primary-text));
+  border-color: var(--context-button-danger-primary-border, var(--button-danger-primary-border));
 }
 
 .primary.danger:hover {
-  background: var(--color-secondary-900);
+  background: var(--context-button-danger-primary-hover-bg, var(--button-danger-primary-hover-bg));
+  color: var(--context-button-danger-primary-hover-text, var(--button-danger-primary-hover-text));
+  border-color: var(--context-button-danger-primary-hover-border, var(--button-danger-primary-hover-border));
 }
 
 .secondary.danger {
-  background: transparent;
-  color: var(--color-danger);
-  border-color: var(--color-secondary-500);
+  background: var(--context-button-danger-secondary-bg, var(--button-danger-secondary-bg));
+  color: var(--context-button-danger-secondary-text, var(--button-danger-secondary-text));
+  border-color: var(--context-button-danger-secondary-border, var(--button-danger-secondary-border));
 }
 
 .secondary.danger:hover {
-  background: var(--color-secondary-50);
+  background: var(--context-button-danger-secondary-hover-bg, var(--button-danger-secondary-hover-bg));
+  color: var(--context-button-danger-secondary-hover-text, var(--button-danger-secondary-hover-text));
+  border-color: var(--context-button-danger-secondary-hover-border, var(--button-danger-secondary-hover-border));
 }
 
 .tertiary.danger {
-  background: transparent;
-  color: var(--color-danger);
+  background: var(--context-button-danger-tertiary-bg, var(--button-danger-tertiary-bg));
+  color: var(--context-button-danger-tertiary-text, var(--button-danger-tertiary-text));
+  border-color: var(--context-button-danger-tertiary-border, var(--button-danger-tertiary-border));
 }
 
 .tertiary.danger:hover {
-  background: var(--color-secondary-50);
+  background: var(--context-button-danger-tertiary-hover-bg, var(--button-danger-tertiary-hover-bg));
+  color: var(--context-button-danger-tertiary-hover-text, var(--button-danger-tertiary-hover-text));
+  border-color: var(--context-button-danger-tertiary-hover-border, var(--button-danger-tertiary-hover-border));
 }

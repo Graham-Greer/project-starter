@@ -6,16 +6,17 @@
 
 :root {
   /* --- Colors --- */
-  --color-primary-50: #e0f2fe; /* Lightest Blue */
-  --color-primary-100: #bae6fd;
-  --color-primary-200: #7dd3fc;
-  --color-primary-300: #38bdf8;
-  --color-primary-400: #0ea5e9;
-  --color-primary-500: #0284c7; /* Brand Blue */
-  --color-primary-600: #0369a1;
-  --color-primary-700: #075985;
-  --color-primary-800: #0c4a6e;
-  --color-primary-900: #0a3a53; /* Darkest Blue */
+
+  --color-primary-50:  #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1; /* Brand */
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #1e1b4b;
 
   --color-secondary-50: #fef2f2; /* Lightest Red */
   --color-secondary-500: #ef4444; /* Accent Red */
@@ -42,6 +43,7 @@
   --foreground: var(--color-neutral-900);
   --surface-1: #ffffff;
   --surface-2: var(--color-neutral-100);
+  --surface-muted: var(--color-neutral-100);
   --text-primary: var(--color-neutral-900);
   --text-secondary: var(--color-neutral-700);
   --text-muted: var(--color-neutral-500);
@@ -55,6 +57,63 @@
   --button-primary-text: var(--color-neutral-50);
   --button-secondary-bg-hover: var(--color-neutral-100);
   --button-secondary-border: var(--color-neutral-300);
+
+  --button-neutral-primary-bg: var(--button-primary-bg);
+  --button-neutral-primary-text: var(--button-primary-text);
+  --button-neutral-primary-border: transparent;
+  --button-neutral-primary-hover-bg: var(--button-primary-hover);
+  --button-neutral-primary-hover-text: var(--button-primary-text);
+  --button-neutral-primary-hover-border: transparent;
+  --button-neutral-secondary-bg: transparent;
+  --button-neutral-secondary-text: var(--text-primary);
+  --button-neutral-secondary-border: var(--button-secondary-border);
+  --button-neutral-secondary-hover-bg: var(--button-secondary-bg-hover);
+  --button-neutral-secondary-hover-text: var(--text-primary);
+  --button-neutral-secondary-hover-border: var(--button-secondary-border);
+  --button-neutral-tertiary-bg: transparent;
+  --button-neutral-tertiary-text: var(--text-primary);
+  --button-neutral-tertiary-border: transparent;
+  --button-neutral-tertiary-hover-bg: var(--surface-2);
+  --button-neutral-tertiary-hover-text: var(--text-primary);
+  --button-neutral-tertiary-hover-border: transparent;
+
+  --button-brand-primary-bg: var(--color-primary-600);
+  --button-brand-primary-text: var(--color-neutral-50);
+  --button-brand-primary-border: transparent;
+  --button-brand-primary-hover-bg: var(--color-primary-700);
+  --button-brand-primary-hover-text: var(--color-neutral-50);
+  --button-brand-primary-hover-border: transparent;
+  --button-brand-secondary-bg: transparent;
+  --button-brand-secondary-text: var(--color-primary-600);
+  --button-brand-secondary-border: var(--color-primary-300);
+  --button-brand-secondary-hover-bg: var(--color-primary-50);
+  --button-brand-secondary-hover-text: var(--color-primary-700);
+  --button-brand-secondary-hover-border: var(--color-primary-300);
+  --button-brand-tertiary-bg: transparent;
+  --button-brand-tertiary-text: var(--color-primary-600);
+  --button-brand-tertiary-border: transparent;
+  --button-brand-tertiary-hover-bg: var(--color-primary-50);
+  --button-brand-tertiary-hover-text: var(--color-primary-700);
+  --button-brand-tertiary-hover-border: transparent;
+
+  --button-danger-primary-bg: var(--color-danger);
+  --button-danger-primary-text: var(--color-neutral-50);
+  --button-danger-primary-border: transparent;
+  --button-danger-primary-hover-bg: var(--color-secondary-900);
+  --button-danger-primary-hover-text: var(--color-neutral-50);
+  --button-danger-primary-hover-border: transparent;
+  --button-danger-secondary-bg: transparent;
+  --button-danger-secondary-text: var(--color-danger);
+  --button-danger-secondary-border: var(--color-secondary-500);
+  --button-danger-secondary-hover-bg: var(--color-secondary-50);
+  --button-danger-secondary-hover-text: var(--color-secondary-900);
+  --button-danger-secondary-hover-border: var(--color-secondary-500);
+  --button-danger-tertiary-bg: transparent;
+  --button-danger-tertiary-text: var(--color-danger);
+  --button-danger-tertiary-border: transparent;
+  --button-danger-tertiary-hover-bg: var(--color-secondary-50);
+  --button-danger-tertiary-hover-text: var(--color-secondary-900);
+  --button-danger-tertiary-hover-border: transparent;
   --logo-filter: none;
   --overlay-backdrop: rgba(17, 24, 39, 0.56);
 
@@ -147,6 +206,7 @@
   --z-index-popover: 1060;
   --z-index-tooltip: 1070;
   --header-height: 4.5rem;
+  --layout-max-width: 80rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -156,6 +216,7 @@
     --foreground: #f3f4f6;
     --surface-1: #111827;
     --surface-2: #1f2937;
+    --surface-muted: #091629;
     --text-primary: #f3f4f6;
     --text-secondary: #d1d5db;
     --text-muted: #9ca3af;
@@ -164,11 +225,28 @@
     --border-strong: rgba(243, 244, 246, 0.24);
     --link: #7dd3fc;
     --link-hover: #bae6fd;
-    --button-primary-bg: #f3f4f6;
-    --button-primary-hover: #d1d5db;
-    --button-primary-text: #111827;
+    --button-primary-bg: var(--color-neutral-900);
+    --button-primary-hover: var(--color-neutral-800);
+    --button-primary-text: var(--color-neutral-50);
     --button-secondary-bg-hover: rgba(243, 244, 246, 0.08);
     --button-secondary-border: rgba(243, 244, 246, 0.24);
+
+    --button-brand-secondary-text: var(--color-primary-200);
+    --button-brand-secondary-border: color-mix(in srgb, var(--color-primary-200) 45%, transparent);
+    --button-brand-secondary-hover-bg: color-mix(in srgb, var(--color-primary-200) 14%, transparent);
+    --button-brand-secondary-hover-text: var(--color-primary-100);
+    --button-brand-secondary-hover-border: color-mix(in srgb, var(--color-primary-200) 62%, transparent);
+    --button-brand-tertiary-text: var(--color-primary-200);
+    --button-brand-tertiary-hover-bg: color-mix(in srgb, var(--color-primary-200) 14%, transparent);
+    --button-brand-tertiary-hover-text: var(--color-primary-100);
+    --button-danger-secondary-text: #fda4af;
+    --button-danger-secondary-border: color-mix(in srgb, #fda4af 48%, transparent);
+    --button-danger-secondary-hover-bg: color-mix(in srgb, #fda4af 14%, transparent);
+    --button-danger-secondary-hover-text: #fecdd3;
+    --button-danger-secondary-hover-border: color-mix(in srgb, #fda4af 65%, transparent);
+    --button-danger-tertiary-text: #fda4af;
+    --button-danger-tertiary-hover-bg: color-mix(in srgb, #fda4af 14%, transparent);
+    --button-danger-tertiary-hover-text: #fecdd3;
     --logo-filter: invert(1);
     --overlay-backdrop: rgba(2, 6, 23, 0.68);
   }
@@ -180,6 +258,7 @@ html[data-theme="light"] {
   --foreground: var(--color-neutral-900);
   --surface-1: #ffffff;
   --surface-2: var(--color-neutral-100);
+  --surface-muted: var(--color-neutral-100);
   --text-primary: var(--color-neutral-900);
   --text-secondary: var(--color-neutral-700);
   --text-muted: var(--color-neutral-500);
@@ -193,6 +272,23 @@ html[data-theme="light"] {
   --button-primary-text: var(--color-neutral-50);
   --button-secondary-bg-hover: var(--color-neutral-100);
   --button-secondary-border: var(--color-neutral-300);
+
+  --button-brand-secondary-text: var(--color-primary-600);
+  --button-brand-secondary-border: var(--color-primary-300);
+  --button-brand-secondary-hover-bg: var(--color-primary-50);
+  --button-brand-secondary-hover-text: var(--color-primary-700);
+  --button-brand-secondary-hover-border: var(--color-primary-300);
+  --button-brand-tertiary-text: var(--color-primary-600);
+  --button-brand-tertiary-hover-bg: var(--color-primary-50);
+  --button-brand-tertiary-hover-text: var(--color-primary-700);
+  --button-danger-secondary-text: var(--color-danger);
+  --button-danger-secondary-border: var(--color-secondary-500);
+  --button-danger-secondary-hover-bg: var(--color-secondary-50);
+  --button-danger-secondary-hover-text: var(--color-secondary-900);
+  --button-danger-secondary-hover-border: var(--color-secondary-500);
+  --button-danger-tertiary-text: var(--color-danger);
+  --button-danger-tertiary-hover-bg: var(--color-secondary-50);
+  --button-danger-tertiary-hover-text: var(--color-secondary-900);
   --logo-filter: none;
   --overlay-backdrop: rgba(17, 24, 39, 0.56);
 }
@@ -203,6 +299,7 @@ html[data-theme="dark"] {
   --foreground: #f3f4f6;
   --surface-1: #111827;
   --surface-2: #1f2937;
+  --surface-muted: #080d14;
   --text-primary: #f3f4f6;
   --text-secondary: #d1d5db;
   --text-muted: #9ca3af;
@@ -211,11 +308,28 @@ html[data-theme="dark"] {
   --border-strong: rgba(243, 244, 246, 0.24);
   --link: #7dd3fc;
   --link-hover: #bae6fd;
-  --button-primary-bg: #f3f4f6;
-  --button-primary-hover: #d1d5db;
-  --button-primary-text: #111827;
+  --button-primary-bg: var(--color-neutral-900);
+  --button-primary-hover: var(--color-neutral-800);
+  --button-primary-text: var(--color-neutral-50);
   --button-secondary-bg-hover: rgba(243, 244, 246, 0.08);
   --button-secondary-border: rgba(243, 244, 246, 0.24);
+
+  --button-brand-secondary-text: var(--color-primary-200);
+  --button-brand-secondary-border: color-mix(in srgb, var(--color-primary-200) 45%, transparent);
+  --button-brand-secondary-hover-bg: color-mix(in srgb, var(--color-primary-200) 14%, transparent);
+  --button-brand-secondary-hover-text: var(--color-primary-100);
+  --button-brand-secondary-hover-border: color-mix(in srgb, var(--color-primary-200) 62%, transparent);
+  --button-brand-tertiary-text: var(--color-primary-200);
+  --button-brand-tertiary-hover-bg: color-mix(in srgb, var(--color-primary-200) 14%, transparent);
+  --button-brand-tertiary-hover-text: var(--color-primary-100);
+  --button-danger-secondary-text: #fda4af;
+  --button-danger-secondary-border: color-mix(in srgb, #fda4af 48%, transparent);
+  --button-danger-secondary-hover-bg: color-mix(in srgb, #fda4af 14%, transparent);
+  --button-danger-secondary-hover-text: #fecdd3;
+  --button-danger-secondary-hover-border: color-mix(in srgb, #fda4af 65%, transparent);
+  --button-danger-tertiary-text: #fda4af;
+  --button-danger-tertiary-hover-bg: color-mix(in srgb, #fda4af 14%, transparent);
+  --button-danger-tertiary-hover-text: #fecdd3;
   --logo-filter: invert(1);
   --overlay-backdrop: rgba(2, 6, 23, 0.68);
 }
@@ -230,6 +344,10 @@ html[data-theme="dark"] {
 html {
   font-size: 100%; /* Base for REM units */
   scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
 }
 
 body {
@@ -282,43 +400,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* --- Buttons (Basic Example) --- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
-  border-radius: var(--border-radius-base);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-  border: var(--space-px) solid transparent;
-}
-
-.btn-primary {
-  background-color: var(--button-primary-bg);
-  color: var(--button-primary-text);
-}
-
-.btn-primary:hover {
-  background-color: var(--button-primary-hover);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--text-primary);
-  border-color: var(--button-secondary-border);
-}
-
-.btn-secondary:hover {
-  background-color: var(--button-secondary-bg-hover);
-}
-
 /* --- Utility Classes (Example) --- */
 .container {
-  max-width: 1200px;
+  max-width: var(--layout-max-width);
   margin-left: auto;
   margin-right: auto;
   padding-left: var(--space-4);

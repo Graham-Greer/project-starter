@@ -155,6 +155,9 @@ Current project decisions:
 - Implementation language remains `.jsx` (TypeScript not required).
 - Theme toggle lives in header as compact sun/moon control.
 - Browser theme preference is the default when no explicit user override exists.
+- Phase 7 default route set uses section/pattern composition:
+  `Home`, `About`, `Services`, `Pricing`, `Contact`, `FAQ`, `Privacy`, `Terms`.
+- Route content contracts are centralized in `src/lib/content/site-pages.js`.
 
 ## Context Blueprint
 

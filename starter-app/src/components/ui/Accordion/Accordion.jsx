@@ -92,8 +92,9 @@ export default function Accordion({
               id={panelId}
               role="region"
               aria-labelledby={triggerId}
+              aria-hidden={!isOpen}
+              inert={!isOpen ? true : undefined}
               className={`${styles.panel} ${isOpen ? styles.panelOpen : ""}`}
-              hidden={!isOpen}
             >
               <div className={styles.panelInner}>{item.content}</div>
             </div>

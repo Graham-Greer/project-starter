@@ -1,7 +1,81 @@
 .section {
+  position: relative;
   text-align: center;
 }
 
-.media {
-  margin-top: var(--space-8);
+.withMedia {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mediaLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.poster {
+  position: absolute;
+  inset: 0;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--overlay-backdrop);
+}
+
+.content {
+  width: 100%;
+}
+
+.contentOnMedia {
+  --link: var(--color-neutral-50);
+  --link-hover: var(--color-neutral-200);
+
+  --context-button-neutral-secondary-text: var(--color-neutral-50);
+  --context-button-neutral-secondary-border: color-mix(in srgb, var(--color-neutral-50) 40%, transparent);
+  --context-button-neutral-secondary-hover-bg: color-mix(in srgb, var(--color-neutral-50) 12%, transparent);
+  --context-button-neutral-secondary-hover-text: var(--color-neutral-50);
+  --context-button-neutral-secondary-hover-border: color-mix(in srgb, var(--color-neutral-50) 56%, transparent);
+
+  --context-badge-subtle-neutral-bg: color-mix(in srgb, var(--color-neutral-50) 18%, transparent);
+  --context-badge-subtle-neutral-text: var(--color-neutral-50);
+  --context-badge-outline-neutral-border: color-mix(in srgb, var(--color-neutral-50) 40%, transparent);
+  --context-badge-outline-neutral-text: var(--color-neutral-50);
+
+  position: relative;
+  z-index: 2;
+  width: min(52rem, calc(100% - (var(--space-4) * 2)));
+  margin: 0 auto;
+  padding: clamp(var(--space-6), 4vw, var(--space-10));
+  border: var(--space-px) solid var(--border-strong);
+  border-radius: var(--border-radius-xl);
+  background: color-mix(in srgb, var(--surface-1) 15%, transparent);
+  backdrop-filter: blur(0.5rem);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 48rem) {
+  .contentOnMedia {
+    width: min(52rem, calc(100% - (var(--space-8) * 2)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    display: none;
+  }
 }

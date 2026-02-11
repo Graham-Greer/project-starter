@@ -1,15 +1,14 @@
 .section {
   width: 100%;
   border-top: var(--space-px) solid var(--border-subtle);
-  border-bottom: var(--space-px) solid var(--border-subtle);
-  background: var(--surface-2);
+  background: var(--surface-muted);
 }
 
 .inner {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: var(--space-12) clamp(var(--space-6), 6vw, var(--space-16));
+  padding: var(--space-12) clamp(var(--space-4), 4vw, var(--space-8));
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -17,7 +17,7 @@ export default function TeamWithLead({ eyebrow, title, description, lead, member
                 alt={lead.photo.alt || lead.name}
                 width={360}
                 height={300}
-                aspectRatio="6 / 5"
+                aspectRatio="16 / 9"
                 radius="md"
               />
             ) : null}

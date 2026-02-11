@@ -4,9 +4,9 @@
 
 .inner {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding-inline: clamp(var(--space-6), 6vw, var(--space-16));
+  padding-inline: clamp(var(--space-4), 4vw, var(--space-8));
 }
 
 .sm {
@@ -30,5 +30,5 @@
 }
 
 .muted {
-  background: var(--surface-2);
+  background: var(--surface-muted);
 }

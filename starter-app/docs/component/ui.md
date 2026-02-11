@@ -109,6 +109,10 @@ Source:
 
 - Wraps Next Image with token-friendly defaults.
 - `src`, `alt`, `width`, `height`, `fill`, `sizes`, `priority`, `quality`
+- `kind`: `content | avatar | logo`
+  - `content` default: `aspectRatio="16 / 9"`, `objectFit="cover"`
+  - `avatar` default: `aspectRatio="1 / 1"`, `objectFit="cover"`
+  - `logo` default: `aspectRatio="auto"`, `objectFit="contain"`
 - `aspectRatio`: CSS aspect-ratio value (e.g. `"16 / 9"`)
 - `objectFit`: image fit strategy (`cover` default)
 - `radius`: `none | sm | md | lg | xl | full`
@@ -241,6 +245,32 @@ import { LogoMarquee } from "@/components/ui";
   speed="normal"
   pauseOnHover
 />
+```
+
+## `ScrollToTopButton`
+
+Source:
+- `src/components/ui/ScrollToTopButton/ScrollToTopButton.jsx`
+- `src/components/ui/ScrollToTopButton/scroll-to-top-button.module.css`
+
+### Props
+
+- `threshold`: scroll offset before button appears (`320` default)
+- `ariaLabel`: accessible label (`"Scroll back to top"` default)
+- `className`
+
+### Behavior
+
+- Hidden until page scroll passes `threshold`.
+- On click, scrolls to top with smooth behavior.
+- Respects reduced-motion preference (falls back to instant scroll).
+
+### Usage
+
+```jsx
+import { ScrollToTopButton } from "@/components/ui";
+
+<ScrollToTopButton threshold={280} />
 ```
 
 ## Adding a New UI Component

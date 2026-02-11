@@ -1,32 +1,33 @@
-import styles from "./page.module.css";
+import {
+  FAQCompact,
+  FeatureComparisonCompact,
+  FeatureSplitMediaRight,
+  FooterColumns,
+  FooterCtaCentered,
+  HeroCentered,
+  Pricing3Tier,
+  StatsRow,
+  TestimonialGridSection,
+} from "@/components/sections";
+import { HOME_PAGE, SITE_FOOTER } from "@/lib/content";
+
+export const metadata = {
+  title: "Starter | Home",
+  description: "Reusable website starter built from composable section variants.",
+};
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-      </main>
-    </div>
+    <>
+      <HeroCentered id="top" {...HOME_PAGE.hero} />
+      <StatsRow id="stats" {...HOME_PAGE.stats} />
+      <FeatureSplitMediaRight id="features" {...HOME_PAGE.feature} />
+      <FeatureComparisonCompact id="comparison" {...HOME_PAGE.comparison} />
+      <Pricing3Tier id="pricing" {...HOME_PAGE.pricing} />
+      <TestimonialGridSection id="testimonials" {...HOME_PAGE.testimonials} />
+      <FAQCompact id="faq" {...HOME_PAGE.faq} />
+      <FooterCtaCentered id="cta" {...HOME_PAGE.footerCta} />
+      <FooterColumns {...SITE_FOOTER} />
+    </>
   );
 }

@@ -23,46 +23,46 @@
 }
 
 .subtle.neutral {
-  background: var(--surface-2);
-  color: var(--text-primary);
+  background: var(--context-badge-subtle-neutral-bg, var(--surface-2));
+  color: var(--context-badge-subtle-neutral-text, var(--text-primary));
 }
 
 .subtle.brand {
-  background: var(--color-primary-50);
-  color: var(--color-primary-700);
+  background: var(--context-badge-subtle-brand-bg, var(--color-primary-50));
+  color: var(--context-badge-subtle-brand-text, var(--color-primary-700));
 }
 
 .subtle.danger {
-  background: var(--color-secondary-50);
-  color: var(--color-secondary-900);
+  background: var(--context-badge-subtle-danger-bg, var(--color-secondary-50));
+  color: var(--context-badge-subtle-danger-text, var(--color-secondary-900));
 }
 
 .solid.neutral {
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
+  background: var(--context-badge-solid-neutral-bg, var(--button-primary-bg));
+  color: var(--context-badge-solid-neutral-text, var(--button-primary-text));
 }
 
 .solid.brand {
-  background: var(--color-primary-600);
-  color: var(--text-inverse);
+  background: var(--context-badge-solid-brand-bg, var(--color-primary-600));
+  color: var(--context-badge-solid-brand-text, var(--text-inverse));
 }
 
 .solid.danger {
-  background: var(--color-danger);
-  color: var(--text-inverse);
+  background: var(--context-badge-solid-danger-bg, var(--color-danger));
+  color: var(--context-badge-solid-danger-text, var(--text-inverse));
 }
 
 .outline.neutral {
-  border-color: var(--border-subtle);
-  color: var(--text-primary);
+  border-color: var(--context-badge-outline-neutral-border, var(--border-subtle));
+  color: var(--context-badge-outline-neutral-text, var(--text-primary));
 }
 
 .outline.brand {
-  border-color: var(--color-primary-300);
-  color: var(--color-primary-700);
+  border-color: var(--context-badge-outline-brand-border, var(--color-primary-300));
+  color: var(--context-badge-outline-brand-text, var(--color-primary-700));
 }
 
 .outline.danger {
-  border-color: var(--color-secondary-500);
-  color: var(--color-secondary-900);
+  border-color: var(--context-badge-outline-danger-border, var(--color-secondary-500));
+  color: var(--context-badge-outline-danger-text, var(--color-secondary-900));
 }

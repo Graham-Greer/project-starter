@@ -2,8 +2,16 @@
   width: 100%;
 }
 
+.card {
+  height: 100%;
+}
+
 .featured {
   border-color: var(--color-primary-300);
+}
+
+.planContent {
+  height: 100%;
 }
 
 .features {
@@ -11,4 +19,8 @@
   gap: var(--space-2);
   padding-left: var(--space-4);
   color: var(--text-secondary);
+}
+
+.ctaRow {
+  margin-top: auto;
 }

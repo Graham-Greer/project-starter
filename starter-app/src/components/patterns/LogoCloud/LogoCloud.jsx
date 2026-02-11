@@ -16,6 +16,7 @@ export default function LogoCloud({
       {items.map((item, index) => (
         <div key={item.id || item.name || index} className={styles.item}>
           <Image
+            kind="logo"
             src={item.src}
             alt={item.alt || item.name || ""}
             width={item.width || 120}

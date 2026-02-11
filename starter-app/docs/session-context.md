@@ -5,8 +5,8 @@ Use this file to resume work in future chats without losing continuity.
 ## Current Status
 
 - Active roadmap doc: `docs/implementation-checklist.md`
-- Current phase: Phase 6 complete (core section variants implemented)
-- Next phase: Phase 7 (route/page assembly using section variants only)
+- Current phase: Phase 7 complete (route/page assembly complete)
+- Next phase: Phase 8 (database/auth readiness planning)
 
 ## Completed So Far
 
@@ -23,6 +23,10 @@ Use this file to resume work in future chats without losing continuity.
 - Patterns layer implemented (core + base compositions)
 - Sections layer implemented (Phase 6 core variants):
   - Hero, Footer, Pricing, Testimonials, FAQ, FeatureSplit, CTA, Team, Stats, FeatureComparison, FooterCta
+- Phase 7 routes assembled from reusable sections/patterns:
+  - `Home`, `About`, `Services`, `Pricing`, `Contact`, `FAQ`, `Privacy`, `Terms`
+- Shared route content contracts added in `src/lib/content/site-pages.js`
+- Added `LegalDocumentSection` pattern for reusable legal/policy content pages
 
 ## Deferred by Design
 
@@ -31,9 +35,9 @@ Use this file to resume work in future chats without losing continuity.
 
 ## Next 3 Actions
 
-1. Phase 7: assemble `Home` page from section variants only.
-2. Phase 7: assemble `About` and `Contact` pages from patterns/sections only.
-3. Phase 7: validate routes avoid one-off UI logic; extract reusable pieces as needed.
+1. Phase 8: define repository/service abstraction in `src/lib/data`.
+2. Phase 8: document auth boundary and client/server data access rules.
+3. Phase 9: run accessibility/responsive/theme/performance audits.
 
 ## Key Source-of-Truth Docs
 
@@ -46,7 +50,7 @@ Use this file to resume work in future chats without losing continuity.
 
 ## Constraints / Notes
 
-- Lint/build was not run in this Codex environment due runtime limitation previously observed.
+- Lint should be run after major route/content additions to verify import and composition integrity.
 - Project uses component-first folder conventions across `components`, `context`, and `hooks`.
 - Keep composition hierarchy strict: `primitives -> ui -> patterns -> sections -> pages`.
 

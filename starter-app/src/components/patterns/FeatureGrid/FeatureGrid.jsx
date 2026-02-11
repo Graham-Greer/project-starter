@@ -1,4 +1,5 @@
-import { Card, Grid } from "../../ui";
+import { Card } from "../../ui";
+import { Grid } from "../../primitives";
 import styles from "./feature-grid.module.css";
 
 export default function FeatureGrid({

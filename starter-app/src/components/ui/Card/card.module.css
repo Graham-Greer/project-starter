@@ -10,6 +10,13 @@
 
 .card {
   background: var(--surface-1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  height: 100%;
 }
 
 .flat {
@@ -52,4 +59,5 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
+  margin-top: auto;
 }

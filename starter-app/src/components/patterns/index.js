@@ -12,3 +12,4 @@ export { default as CTASection } from "./CTASection";
 export { default as FeatureSplitSection } from "./FeatureSplitSection";
 export { default as TeamSection } from "./TeamSection";
 export { default as FooterCtaSection } from "./FooterCtaSection";
+export { default as LegalDocumentSection } from "./LegalDocumentSection";

@@ -74,6 +74,7 @@ This checklist tracks execution order for building and maintaining the reusable 
 - [ ] Build `CaseStudyPreviewSection` pattern. (Optional/Phase+)
 - [ ] Build `TrustSecuritySection` pattern. (Optional/Phase+)
 - [x] Build `FooterCtaSection` pattern. (Core)
+- [x] Build `LegalDocumentSection` pattern for reusable policy/legal content pages. (Core for default route set)
 - [ ] Build `EmptyStateSection` pattern. (Optional/Phase+)
 
 ## Phase 6: Section Variants
@@ -95,10 +96,14 @@ This checklist tracks execution order for building and maintaining the reusable 
 
 ## Phase 7: Routing and Page Assembly
 
-- [ ] Assemble homepage from section variants only.
-- [ ] Assemble About/Contact pages using patterns/sections.
-- [ ] Confirm route-level components avoid one-off UI logic unless justified.
-- [ ] Move reusable route logic into components/hooks.
+- [x] Assemble homepage from section variants only.
+- [x] Assemble About/Contact pages using patterns/sections.
+- [x] Assemble default starter route set: `Home`, `About`, `Services`, `Pricing`, `Contact`, `FAQ`, `Privacy`, `Terms`.
+- [x] Add centralized route content contracts in `src/lib/content/site-pages.js` and consume from route files.
+- [x] Add shared legal/policy page composition using `LegalDocumentSection` for `/privacy` and `/terms`.
+- [x] Update header/mobile navigation links to include Phase 7 primary routes (`Services`, `Pricing`, `FAQ`).
+- [x] Confirm route-level components avoid one-off UI logic unless justified.
+- [x] Move reusable route logic into components/hooks.
 
 ## Phase 8: Database/Auth Readiness (Firebase-capable)
 

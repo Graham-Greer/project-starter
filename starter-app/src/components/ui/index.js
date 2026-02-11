@@ -5,3 +5,4 @@ export { default as Badge } from "./Badge";
 export { default as Accordion } from "./Accordion";
 export { default as Tabs } from "./Tabs";
 export { default as LogoMarquee } from "./LogoMarquee";
+export { default as ScrollToTopButton } from "./ScrollToTopButton";

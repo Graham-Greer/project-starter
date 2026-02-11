@@ -10,7 +10,7 @@
 .inner {
   display: flex;
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--layout-max-width);
   min-height: var(--header-height);
   margin: 0 auto;
   align-items: center;
@@ -34,7 +34,7 @@
 .desktopNav {
   display: none;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .actions {
@@ -45,6 +45,7 @@
 
 .navLink {
   color: var(--text-secondary);
+  padding: var(--space-4);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-none);

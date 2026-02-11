@@ -39,7 +39,7 @@ export default function FeatureSplitSection({
             alt={media.alt || ""}
             width={media.width || 960}
             height={media.height || 640}
-            aspectRatio={media.aspectRatio || "4 / 3"}
+            aspectRatio={media.aspectRatio || "16 / 9"}
             radius="lg"
           />
         ) : (

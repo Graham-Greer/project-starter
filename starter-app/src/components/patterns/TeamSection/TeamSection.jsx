@@ -1,5 +1,5 @@
-import { Card, Grid, Image } from "../../ui";
-import { Heading, Text } from "../../primitives";
+import { Card, Image } from "../../ui";
+import { Grid, Heading, Text } from "../../primitives";
 import styles from "./team-section.module.css";
 
 export default function TeamSection({ members = [], className = "", ...props }) {
@@ -21,7 +21,7 @@ export default function TeamSection({ members = [], className = "", ...props }) 
                 alt={member.photo.alt || member.name}
                 width={400}
                 height={360}
-                aspectRatio="4 / 3"
+                aspectRatio="16 / 9"
                 radius="md"
               />
             ) : null

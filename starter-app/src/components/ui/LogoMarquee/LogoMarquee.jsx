@@ -36,6 +36,7 @@ export default function LogoMarquee({
         {trackItems.map((item, index) => {
           const content = (
             <Image
+              kind="logo"
               src={item.src}
               alt={item.alt || item.name || ""}
               width={item.width || 120}

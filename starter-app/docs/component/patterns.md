@@ -34,6 +34,7 @@ This document is the scoped reference for components in `src/components/patterns
 - `FeatureSplitSection`
 - `TeamSection`
 - `FooterCtaSection`
+- `LegalDocumentSection`
 
 ## API Highlights
 
@@ -77,10 +78,17 @@ This document is the scoped reference for components in `src/components/patterns
   - `columns` (array)
   - `rows` (array with values)
 
+## `LegalDocumentSection`
+
+- Structured legal/policy composition for static content pages.
+- Key props:
+  - `eyebrow`, `title`, `description`
+  - `sections`: array of `{ id, title, paragraphs, items }`
+
 ## Usage Example
 
 ```jsx
-import { Section, SectionHeader, FeatureGrid, CTASection } from "@/components/patterns";
+import { LegalDocumentSection, Section, SectionHeader, FeatureGrid, CTASection } from "@/components/patterns";
 
 <Section density="lg" tone="default">
   <SectionHeader
@@ -95,5 +103,16 @@ import { Section, SectionHeader, FeatureGrid, CTASection } from "@/components/pa
   title="Ready to get started?"
   description="Build faster with reusable patterns."
   primaryAction={{ label: "Start now", href: "/contact" }}
+/>
+
+<LegalDocumentSection
+  title="Privacy details"
+  sections={[
+    {
+      id: "collection",
+      title: "Information we collect",
+      paragraphs: ["We collect details submitted through inquiry forms."],
+    },
+  ]}
 />
 ```

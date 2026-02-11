@@ -1,5 +1,5 @@
-import { Badge, Button, Card, Grid } from "../../ui";
-import { Heading, Stack, Text } from "../../primitives";
+import { Badge, Button, Card } from "../../ui";
+import { Grid, Heading, Stack, Text } from "../../primitives";
 import styles from "./pricing-table.module.css";
 
 export default function PricingTable({ plans = [], className = "", ...props }) {
@@ -14,9 +14,9 @@ export default function PricingTable({ plans = [], className = "", ...props }) {
         <Card
           key={plan.id || plan.name || index}
           variant={plan.featured ? "elevated" : "outlined"}
-          className={plan.featured ? styles.featured : ""}
+          className={`${styles.card} ${plan.featured ? styles.featured : ""}`.trim()}
         >
-          <Stack gap="var(--space-4)">
+          <Stack gap="var(--space-4)" className={styles.planContent}>
             {plan.badge ? <Badge tone={plan.featured ? "brand" : "neutral"}>{plan.badge}</Badge> : null}
             <Heading as="h3" size="h4" weight="semibold">
               {plan.name}
@@ -39,17 +39,19 @@ export default function PricingTable({ plans = [], className = "", ...props }) {
                 ))}
               </ul>
             ) : null}
-            {plan.cta ? (
-              <Button
-                href={plan.cta.href}
-                variant={plan.featured ? "primary" : "secondary"}
-                tone={plan.featured ? "brand" : "neutral"}
-                iconRight="arrowRight"
-                fullWidth
-              >
-                {plan.cta.label}
-              </Button>
-            ) : null}
+            <div className={styles.ctaRow}>
+              {plan.cta ? (
+                <Button
+                  href={plan.cta.href}
+                  variant={plan.featured ? "primary" : "secondary"}
+                  tone={plan.featured ? "brand" : "neutral"}
+                  iconRight="arrowRight"
+                  fullWidth
+                >
+                  {plan.cta.label}
+                </Button>
+              ) : null}
+            </div>
           </Stack>
         </Card>
       ))}

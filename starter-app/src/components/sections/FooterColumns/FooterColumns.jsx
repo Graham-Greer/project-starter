@@ -25,10 +25,8 @@ export default function FooterColumns({ brand = "Starter", description, columns 
           ))}
         </div>
       </div>
-      <div className={styles.legal}>
-        {legal.map((item, index) => (
-          <Link key={item.href || index} href={item.href || "#"} className={styles.link}>{item.label}</Link>
-        ))}
+      <div className={styles.copyright}>
+        <span>© 2026 Graham Greer | All Rights Reserved</span>
       </div>
     </footer>
   );

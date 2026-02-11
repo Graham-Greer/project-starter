@@ -2,16 +2,41 @@
   width: 100%;
 }
 
+.card {
+  height: 100%;
+}
+
+.content {
+  height: 100%;
+}
+
 .quote {
   margin-bottom: 0;
 }
 
 .person {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-3);
+  margin-top: auto;
 }
 
 .avatar {
+  width: var(--space-12);
+  height: var(--space-12);
   flex-shrink: 0;
+  border: var(--space-px) solid var(--border-subtle);
+}
+
+.identity {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.name {
+  margin: 0;
+}
+
+.role {
+  margin: 0;
 }

@@ -1,6 +1,6 @@
 .main {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
   padding: var(--space-16) clamp(var(--space-4), 4vw, var(--space-8));
 }

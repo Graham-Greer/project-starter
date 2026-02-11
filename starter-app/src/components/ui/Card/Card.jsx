@@ -39,7 +39,7 @@ export default function Card({
       className={rootClassName}
       {...props}
     >
-      <Stack gap="var(--space-4)">
+      <Stack gap="var(--space-4)" className={styles.content}>
         {media ? <div className={styles.media}>{media}</div> : null}
         {title ? (
           <Heading as="h3" size="h4" weight="semibold" className={styles.title}>
