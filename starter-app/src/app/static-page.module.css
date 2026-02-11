@@ -1,0 +1,13 @@
+.main {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-16) clamp(var(--space-4), 4vw, var(--space-8));
+}
+
+.lead {
+  max-width: 48rem;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-secondary);
+}

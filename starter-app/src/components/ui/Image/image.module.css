@@ -1,0 +1,13 @@
+.wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--image-radius, var(--border-radius-md));
+  aspect-ratio: var(--image-aspect-ratio, auto);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+}

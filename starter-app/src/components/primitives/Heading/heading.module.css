@@ -1,0 +1,9 @@
+.heading {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--heading-size, var(--font-size-4xl));
+  font-weight: var(--heading-weight, var(--font-weight-semibold));
+  line-height: var(--heading-leading, var(--line-height-tight));
+  color: var(--heading-tone, var(--text-primary));
+  text-align: var(--heading-align, left);
+}

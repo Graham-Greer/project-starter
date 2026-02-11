@@ -1,0 +1,10 @@
+.grid {
+  width: 100%;
+}
+
+.stat {
+  padding: var(--space-5);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  background: var(--surface-1);
+}

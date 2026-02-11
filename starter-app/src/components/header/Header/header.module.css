@@ -1,0 +1,71 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+  border-bottom: var(--space-px) solid var(--border-subtle);
+  background-color: color-mix(in srgb, var(--background) 92%, transparent);
+  backdrop-filter: blur(0.625rem);
+}
+
+.inner {
+  display: flex;
+  width: 100%;
+  max-width: 72rem;
+  min-height: var(--header-height);
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 clamp(var(--space-4), 4vw, var(--space-8));
+}
+
+.logo {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-none);
+  text-decoration: none;
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.navLink {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-none);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.active {
+  color: var(--text-primary);
+}
+
+.activeCta {
+  box-shadow: 0 0 0 var(--space-px) var(--border-strong);
+}
+
+@media (min-width: 48rem) {
+  .desktopNav {
+    display: flex;
+  }
+}

@@ -1,0 +1,7 @@
+.section {
+  text-align: center;
+}
+
+.media {
+  margin-top: var(--space-8);
+}

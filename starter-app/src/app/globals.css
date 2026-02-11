@@ -1,0 +1,352 @@
+/*
+  globals.css
+  This file sets up global styles, design tokens, and utility classes
+  using CSS custom properties (global variables) for a consistent design system.
+*/
+
+:root {
+  /* --- Colors --- */
+  --color-primary-50: #e0f2fe; /* Lightest Blue */
+  --color-primary-100: #bae6fd;
+  --color-primary-200: #7dd3fc;
+  --color-primary-300: #38bdf8;
+  --color-primary-400: #0ea5e9;
+  --color-primary-500: #0284c7; /* Brand Blue */
+  --color-primary-600: #0369a1;
+  --color-primary-700: #075985;
+  --color-primary-800: #0c4a6e;
+  --color-primary-900: #0a3a53; /* Darkest Blue */
+
+  --color-secondary-50: #fef2f2; /* Lightest Red */
+  --color-secondary-500: #ef4444; /* Accent Red */
+  --color-secondary-900: #7f1d1d; /* Darkest Red */
+
+  --color-neutral-50: #f9fafb; /* Lightest Gray */
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280; /* Mid Gray */
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151; /* Dark Gray */
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827; /* Darkest Gray */
+
+  --color-success: #22c55e;
+  --color-warning: #facc15;
+  --color-danger: #ef4444;
+
+  /* --- Theme: Light (Default) --- */
+  color-scheme: light;
+  --background: var(--color-neutral-50);
+  --foreground: var(--color-neutral-900);
+  --surface-1: #ffffff;
+  --surface-2: var(--color-neutral-100);
+  --text-primary: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-700);
+  --text-muted: var(--color-neutral-500);
+  --text-inverse: var(--color-neutral-50);
+  --border-subtle: var(--color-neutral-200);
+  --border-strong: var(--color-neutral-300);
+  --link: var(--color-primary-600);
+  --link-hover: var(--color-primary-800);
+  --button-primary-bg: var(--color-neutral-900);
+  --button-primary-hover: var(--color-neutral-800);
+  --button-primary-text: var(--color-neutral-50);
+  --button-secondary-bg-hover: var(--color-neutral-100);
+  --button-secondary-border: var(--color-neutral-300);
+  --logo-filter: none;
+  --overlay-backdrop: rgba(17, 24, 39, 0.56);
+
+  /* --- Typography --- */
+  --font-family-sans: var(--font-sans), Roboto, sans-serif;
+  --font-family-serif: Georgia, serif;
+  --font-family-mono: var(--font-mono), "JetBrains Mono", "Fira Code", "Roboto Mono", monospace;
+
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* --- Spacing --- */
+  /* Consistent spacing scale based on 0.25rem (4px) increments */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0_5: 0.125rem; /* 2px */
+  --space-1: 0.25rem; /* 4px */
+  --space-1_5: 0.375rem; /* 6px */
+  --space-2: 0.5rem; /* 8px */
+  --space-2_5: 0.625rem; /* 10px */
+  --space-3: 0.75rem; /* 12px */
+  --space-3_5: 0.875rem; /* 14px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-32: 8rem; /* 128px */
+  --space-40: 10rem; /* 160px */
+  --space-48: 12rem; /* 192px */
+  --space-56: 14rem; /* 224px */
+  --space-64: 16rem; /* 256px */
+
+  /* --- Border Radius --- */
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem; /* 2px */
+  --border-radius-base: 0.25rem; /* 4px */
+  --border-radius-md: 0.375rem; /* 6px */
+  --border-radius-lg: 0.5rem; /* 8px */
+  --border-radius-xl: 0.75rem; /* 12px */
+  --border-radius-full: 9999px;
+
+  /* --- Box Shadow --- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+
+  /* --- Z-index --- */
+  --z-index-hide: -1;
+  --z-index-auto: auto;
+  --z-index-base: 0;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --header-height: 4.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #0b1020;
+    --foreground: #f3f4f6;
+    --surface-1: #111827;
+    --surface-2: #1f2937;
+    --text-primary: #f3f4f6;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --text-inverse: #111827;
+    --border-subtle: rgba(243, 244, 246, 0.14);
+    --border-strong: rgba(243, 244, 246, 0.24);
+    --link: #7dd3fc;
+    --link-hover: #bae6fd;
+    --button-primary-bg: #f3f4f6;
+    --button-primary-hover: #d1d5db;
+    --button-primary-text: #111827;
+    --button-secondary-bg-hover: rgba(243, 244, 246, 0.08);
+    --button-secondary-border: rgba(243, 244, 246, 0.24);
+    --logo-filter: invert(1);
+    --overlay-backdrop: rgba(2, 6, 23, 0.68);
+  }
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --background: var(--color-neutral-50);
+  --foreground: var(--color-neutral-900);
+  --surface-1: #ffffff;
+  --surface-2: var(--color-neutral-100);
+  --text-primary: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-700);
+  --text-muted: var(--color-neutral-500);
+  --text-inverse: var(--color-neutral-50);
+  --border-subtle: var(--color-neutral-200);
+  --border-strong: var(--color-neutral-300);
+  --link: var(--color-primary-600);
+  --link-hover: var(--color-primary-800);
+  --button-primary-bg: var(--color-neutral-900);
+  --button-primary-hover: var(--color-neutral-800);
+  --button-primary-text: var(--color-neutral-50);
+  --button-secondary-bg-hover: var(--color-neutral-100);
+  --button-secondary-border: var(--color-neutral-300);
+  --logo-filter: none;
+  --overlay-backdrop: rgba(17, 24, 39, 0.56);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0b1020;
+  --foreground: #f3f4f6;
+  --surface-1: #111827;
+  --surface-2: #1f2937;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-inverse: #111827;
+  --border-subtle: rgba(243, 244, 246, 0.14);
+  --border-strong: rgba(243, 244, 246, 0.24);
+  --link: #7dd3fc;
+  --link-hover: #bae6fd;
+  --button-primary-bg: #f3f4f6;
+  --button-primary-hover: #d1d5db;
+  --button-primary-text: #111827;
+  --button-secondary-bg-hover: rgba(243, 244, 246, 0.08);
+  --button-secondary-border: rgba(243, 244, 246, 0.24);
+  --logo-filter: invert(1);
+  --overlay-backdrop: rgba(2, 6, 23, 0.68);
+}
+
+/* --- Base Styles --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%; /* Base for REM units */
+  scroll-behavior: smooth;
+}
+
+body {
+  max-width: 100vw;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-secondary);
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-family-mono);
+}
+
+/* --- Headings --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-sans); /* Or a different heading font if preferred */
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-4);
+}
+
+h1 { font-size: var(--font-size-5xl); font-weight: var(--font-weight-extrabold); }
+h2 { font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
+h3 { font-size: var(--font-size-3xl); font-weight: var(--font-weight-semibold); }
+h4 { font-size: var(--font-size-2xl); font-weight: var(--font-weight-semibold); }
+h5 { font-size: var(--font-size-xl); font-weight: var(--font-weight-medium); }
+h6 { font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); }
+
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* --- Links --- */
+a {
+  color: var(--link);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* --- Buttons (Basic Example) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  border: var(--space-px) solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--button-secondary-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--button-secondary-bg-hover);
+}
+
+/* --- Utility Classes (Example) --- */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.text-center { text-align: center; }
+.text-primary { color: var(--color-primary-500); }
+.bg-primary { background-color: var(--color-primary-500); }
+.p-4 { padding: var(--space-4); }
+.m-auto { margin: auto; }
+
+/* --- Responsive Design Principles (Example using a mobile-first approach) --- */
+/* Small devices (phones, 640px and up) */
+@media (min-width: 640px) {
+  h1 { font-size: var(--font-size-6xl); }
+  h2 { font-size: var(--font-size-5xl); }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  /* Adjustments for larger screens */
+}

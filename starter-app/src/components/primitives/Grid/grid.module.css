@@ -1,0 +1,6 @@
+.grid {
+  display: grid;
+  grid-template-columns: var(--grid-columns, 1fr);
+  gap: var(--grid-gap, var(--space-4));
+  align-items: var(--grid-align-items, stretch);
+}

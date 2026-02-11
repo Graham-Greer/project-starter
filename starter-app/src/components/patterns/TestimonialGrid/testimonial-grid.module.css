@@ -1,0 +1,17 @@
+.grid {
+  width: 100%;
+}
+
+.quote {
+  margin-bottom: 0;
+}
+
+.person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  flex-shrink: 0;
+}

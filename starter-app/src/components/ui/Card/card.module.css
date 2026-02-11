@@ -1,0 +1,55 @@
+.linkWrap {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.linkWrap:hover {
+  text-decoration: none;
+}
+
+.card {
+  background: var(--surface-1);
+}
+
+.flat {
+  border: var(--space-px) solid transparent;
+}
+
+.outlined {
+  border: var(--space-px) solid var(--border-subtle);
+}
+
+.elevated {
+  border: var(--space-px) solid transparent;
+  box-shadow: var(--shadow-md);
+}
+
+.interactive {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.interactive:hover {
+  transform: translateY(calc(var(--space-px) * -2));
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.description {
+  margin-bottom: 0;
+}
+
+.media {
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}

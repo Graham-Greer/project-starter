@@ -1,0 +1,21 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}

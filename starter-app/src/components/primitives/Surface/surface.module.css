@@ -1,0 +1,18 @@
+.surface {
+  padding: var(--surface-padding, var(--space-6));
+  border-radius: var(--surface-radius, var(--border-radius-lg));
+}
+
+.flat {
+  background: var(--surface-1);
+}
+
+.outlined {
+  background: var(--surface-1);
+  border: var(--space-px) solid var(--border-subtle);
+}
+
+.elevated {
+  background: var(--surface-1);
+  box-shadow: var(--shadow-md);
+}

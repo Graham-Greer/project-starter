@@ -1,0 +1,38 @@
+.wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  background: var(--surface-1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 36rem;
+}
+
+.headerCell {
+  padding: var(--space-4);
+  border-bottom: var(--space-px) solid var(--border-subtle);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-align: left;
+  color: var(--text-primary);
+  background: var(--surface-2);
+}
+
+.rowLabel {
+  padding: var(--space-4);
+  border-top: var(--space-px) solid var(--border-subtle);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  color: var(--text-primary);
+}
+
+.cell {
+  padding: var(--space-4);
+  border-top: var(--space-px) solid var(--border-subtle);
+  color: var(--text-secondary);
+}

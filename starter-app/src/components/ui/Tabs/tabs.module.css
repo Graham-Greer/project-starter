@@ -1,0 +1,72 @@
+.tabs {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.horizontal {
+  flex-direction: column;
+}
+
+.vertical {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.tabList {
+  display: flex;
+  gap: var(--space-2);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-1);
+  background: var(--surface-1);
+}
+
+.vertical .tabList {
+  flex-direction: column;
+  min-width: 12rem;
+}
+
+.tab {
+  border: 0;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-none);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  text-align: left;
+}
+
+.tab:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabActive {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+
+.tabActive:hover {
+  background: var(--button-primary-hover);
+  color: var(--button-primary-text);
+}
+
+.panel {
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  background: var(--surface-1);
+  padding: var(--space-5);
+}
+
+.vertical .panel {
+  flex: 1;
+}

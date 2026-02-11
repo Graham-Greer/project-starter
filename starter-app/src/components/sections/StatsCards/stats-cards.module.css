@@ -1,0 +1,4 @@
+.section {
+  border-top: var(--space-px) solid var(--border-subtle);
+  border-bottom: var(--space-px) solid var(--border-subtle);
+}

@@ -1,0 +1,56 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-lg);
+  background: var(--surface-1);
+  cursor: pointer;
+  padding: 0;
+}
+
+.line {
+  position: absolute;
+  left: 50%;
+  width: 1.25rem;
+  height: 0.125rem;
+  border-radius: var(--border-radius-full);
+  background-color: var(--text-primary);
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.top {
+  top: calc(50% - 0.375rem);
+}
+
+.middle {
+  top: 50%;
+}
+
+.bottom {
+  top: calc(50% + 0.375rem);
+}
+
+.topOpen {
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.middleOpen {
+  opacity: 0;
+}
+
+.bottomOpen {
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+@media (min-width: 48rem) {
+  .button {
+    display: none;
+  }
+}

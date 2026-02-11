@@ -1,0 +1,16 @@
+.leadCard {
+  margin-bottom: var(--space-6);
+}
+
+.leadLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-6);
+  align-items: center;
+}
+
+@media (max-width: 48rem) {
+  .leadLayout {
+    grid-template-columns: 1fr;
+  }
+}

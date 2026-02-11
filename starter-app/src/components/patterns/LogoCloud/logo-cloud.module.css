@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.item {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.logoWrapper {
+  width: auto;
+}
+
+.logoImage {
+  max-width: 100%;
+  height: 2rem;
+  width: auto;
+  opacity: 0.85;
+}

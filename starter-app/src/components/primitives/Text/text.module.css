@@ -1,0 +1,9 @@
+.text {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--text-size, var(--font-size-base));
+  font-weight: var(--text-weight, var(--font-weight-normal));
+  line-height: var(--text-leading, var(--line-height-relaxed));
+  color: var(--text-tone, var(--text-secondary));
+  text-align: var(--text-align, left);
+}
