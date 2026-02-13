@@ -1,0 +1,155 @@
+import DashboardActionPanel from "@/components/cms/DashboardActionPanel/DashboardActionPanel";
+import DashboardPanel from "@/components/cms/DashboardPanel/DashboardPanel";
+import PageSettingsPanel from "@/components/cms/PageSettingsPanel/PageSettingsPanel";
+import SectionLibraryPanel from "@/components/cms/SectionLibraryPanel/SectionLibraryPanel";
+
+export default function CmsSidebar({
+  styles,
+  isEditingPage,
+  workspaceId,
+  workspaceAccess,
+  selectedSite,
+  workspaceStatusMessage,
+  siteStatusMessage,
+  pageStatusMessage,
+  isLoadingSites,
+  sites,
+  selectedSiteId,
+  onSelectSite,
+  activeDashboardAction,
+  onToggleDashboardAction,
+  onWorkspaceSubmit,
+  workspaceIdInput,
+  onWorkspaceIdChange,
+  onCreateSite,
+  siteNameInput,
+  onSiteNameChange,
+  siteSlugInput,
+  onSiteSlugChange,
+  onCreatePage,
+  pageTitleInput,
+  onPageTitleChange,
+  pageSlugInput,
+  onPageSlugChange,
+  parentPageIdInput,
+  onParentPageIdChange,
+  selectedSitePages,
+  onCloseAction,
+  selectedPage,
+  pageTreeStatusMessage,
+  onUpdatePage,
+  pageSettingsTitleInput,
+  onPageSettingsTitleChange,
+  pageSettingsSlugInput,
+  onPageSettingsSlugChange,
+  pageSettingsMetaTitleInput,
+  onPageSettingsMetaTitleChange,
+  pageSettingsMetaDescriptionInput,
+  onPageSettingsMetaDescriptionChange,
+  pageSettingsOgImageUrlInput,
+  onPageSettingsOgImageUrlChange,
+  onRunPrePublishValidation,
+  isRunningPrePublishValidation,
+  prePublishStatusMessage,
+  prePublishChecks,
+  onPublishPage,
+  isPublishingPage,
+  publishStatusMessage,
+  didPublishPage,
+  moveParentPageIdInput,
+  onMoveParentPageIdChange,
+  availableParentPages,
+  isUpdatingPage,
+  didUpdatePage,
+  sectionTypes,
+  newBlockSectionType,
+  onSelectSectionType,
+  getSectionLabel,
+}) {
+  return (
+    <aside className={styles.sidebar}>
+      {!isEditingPage ? (
+        <>
+          <DashboardPanel
+            styles={styles}
+            workspaceId={workspaceId}
+            workspaceAccess={workspaceAccess}
+            selectedSite={selectedSite}
+            workspaceStatusMessage={workspaceStatusMessage}
+            siteStatusMessage={siteStatusMessage}
+            pageStatusMessage={pageStatusMessage}
+            isLoadingSites={isLoadingSites}
+            sites={sites}
+            selectedSiteId={selectedSiteId}
+            onSelectSite={onSelectSite}
+            onToggleDashboardAction={onToggleDashboardAction}
+          />
+          <DashboardActionPanel
+            styles={styles}
+            activeDashboardAction={activeDashboardAction}
+            onWorkspaceSubmit={onWorkspaceSubmit}
+            workspaceIdInput={workspaceIdInput}
+            onWorkspaceIdChange={onWorkspaceIdChange}
+            onCreateSite={onCreateSite}
+            siteNameInput={siteNameInput}
+            onSiteNameChange={onSiteNameChange}
+            siteSlugInput={siteSlugInput}
+            onSiteSlugChange={onSiteSlugChange}
+            workspaceId={workspaceId}
+            onCreatePage={onCreatePage}
+            pageTitleInput={pageTitleInput}
+            onPageTitleChange={onPageTitleChange}
+            pageSlugInput={pageSlugInput}
+            onPageSlugChange={onPageSlugChange}
+            selectedSiteId={selectedSiteId}
+            parentPageIdInput={parentPageIdInput}
+            onParentPageIdChange={onParentPageIdChange}
+            selectedSitePages={selectedSitePages}
+            onCloseAction={onCloseAction}
+          />
+        </>
+      ) : null}
+
+      {isEditingPage ? (
+        <>
+          <PageSettingsPanel
+            styles={styles}
+            selectedPage={selectedPage}
+            pageTreeStatusMessage={pageTreeStatusMessage}
+            onUpdatePage={onUpdatePage}
+            pageSettingsTitleInput={pageSettingsTitleInput}
+            onPageSettingsTitleChange={onPageSettingsTitleChange}
+            pageSettingsSlugInput={pageSettingsSlugInput}
+            onPageSettingsSlugChange={onPageSettingsSlugChange}
+            pageSettingsMetaTitleInput={pageSettingsMetaTitleInput}
+            onPageSettingsMetaTitleChange={onPageSettingsMetaTitleChange}
+            pageSettingsMetaDescriptionInput={pageSettingsMetaDescriptionInput}
+            onPageSettingsMetaDescriptionChange={onPageSettingsMetaDescriptionChange}
+            pageSettingsOgImageUrlInput={pageSettingsOgImageUrlInput}
+            onPageSettingsOgImageUrlChange={onPageSettingsOgImageUrlChange}
+            onRunPrePublishValidation={onRunPrePublishValidation}
+            isRunningPrePublishValidation={isRunningPrePublishValidation}
+            prePublishStatusMessage={prePublishStatusMessage}
+            prePublishChecks={prePublishChecks}
+            onPublishPage={onPublishPage}
+            isPublishingPage={isPublishingPage}
+            publishStatusMessage={publishStatusMessage}
+            didPublishPage={didPublishPage}
+            moveParentPageIdInput={moveParentPageIdInput}
+            onMoveParentPageIdChange={onMoveParentPageIdChange}
+            availableParentPages={availableParentPages}
+            isUpdatingPage={isUpdatingPage}
+            didUpdatePage={didUpdatePage}
+          />
+          <SectionLibraryPanel
+            styles={styles}
+            sectionTypes={sectionTypes}
+            newBlockSectionType={newBlockSectionType}
+            onSelectSectionType={onSelectSectionType}
+            getSectionLabel={getSectionLabel}
+          />
+        </>
+      ) : null}
+    </aside>
+  );
+}

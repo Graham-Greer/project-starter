@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function memberDoc(workspaceId) {
+      return get(/databases/$(database)/documents/workspaces/$(workspaceId)/members/$(request.auth.uid));
+    }
+
+    function hasRole(workspaceId, roles) {
+      return isSignedIn()
+        && memberDoc(workspaceId).data.status == "active"
+        && memberDoc(workspaceId).data.role in roles;
+    }
+
+    match /workspaces/{workspaceId} {
+      allow read: if hasRole(workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow update: if hasRole(workspaceId, ["owner", "admin"]);
+      allow create, delete: if false;
+    }
+
+    match /workspaces/{workspaceId}/members/{userId} {
+      allow read: if hasRole(workspaceId, ["owner", "admin"]);
+      allow write: if hasRole(workspaceId, ["owner"]);
+    }
+
+    match /sites/{siteId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow create: if hasRole(request.resource.data.workspaceId, ["owner", "admin", "editor"]);
+      allow update: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor"]);
+      allow delete: if hasRole(resource.data.workspaceId, ["owner", "admin"]);
+    }
+
+    match /sites/{siteId}/pages/{pageId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow write: if hasRole(request.resource.data.workspaceId, ["owner", "admin", "editor"]);
+    }
+
+    match /sites/{siteId}/pageVersions/{versionId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow write: if false;
+    }
+
+    match /sites/{siteId}/siteSnapshots/{snapshotId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow write: if false;
+    }
+
+    match /assets/{assetId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow write: if hasRole(request.resource.data.workspaceId, ["owner", "admin", "editor"]);
+    }
+
+    match /aiRuns/{runId} {
+      allow read: if hasRole(resource.data.workspaceId, ["owner", "admin", "editor", "viewer"]);
+      allow create: if hasRole(request.resource.data.workspaceId, ["owner", "admin", "editor"]);
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

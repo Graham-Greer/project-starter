@@ -25,6 +25,10 @@ Rules:
 - Components in higher layers can depend on lower layers only.
 - Do not import `sections` into `ui`/`primitives`.
 - Do not place business/data logic inside presentational components.
+- Route/page files must remain composition shells:
+  - Keep route components focused on wiring state + child modules.
+  - Extract data mutations/query orchestration into hooks/services when scope grows.
+  - Avoid duplicating renderer/editor logic across route and child components.
 
 ## 3. Styling Rules
 
@@ -54,6 +58,8 @@ Interaction standards:
 - Provide controlled/uncontrolled APIs when needed.
 - Prefer semantic/slot props (`iconLeft`, `actions`, `media`) over many booleans.
 - Preserve keyboard and screen-reader support by default.
+- For destructive confirmations in product UI, use reusable modal/dialog components.
+- Avoid `window.confirm`/`window.alert` in shipped CMS experiences unless explicitly approved for a temporary fallback.
 
 ## 5. State and Context Standards
 
@@ -77,6 +83,8 @@ Context rules:
 - Route all DB communication through repository/service modules.
 - Validate all inputs before writes and normalize outputs after reads.
 - Keep data contracts explicit and documented.
+- Reserve `id` as an identity boundary field (document/query identity), not mutable payload data.
+- Never persist `id` inside document payloads when the datastore already provides canonical document IDs.
 
 Suggested structure:
 - `src/lib/data/` for repositories/services
@@ -111,6 +119,7 @@ Recommended modules:
 - Avoid over-fetching; request only required fields/data.
 - Implement pagination/cursor patterns for list screens.
 - Cache where appropriate and invalidate intentionally.
+- Adapters must normalize identity consistently so canonical store IDs override any stale payload identity fields.
 
 ## 7. Auth and Access Control Standards
 
@@ -152,3 +161,16 @@ Recommended modules:
 - Meets accessibility and responsive standards.
 - Data access follows repository/service abstraction.
 - Docs updated when contracts or standards change.
+
+## 12. Monorepo Readiness Rules
+
+- Build shared contracts as app-agnostic modules (candidate future packages):
+  - `src/lib/registry`
+  - `src/lib/validation`
+  - `src/lib/data` interfaces/contracts
+- Avoid deep relative imports across domains; prefer stable barrel exports.
+- Do not import route/page/layout modules into shared library code.
+- Keep CMS/editor concerns isolated from public site rendering concerns.
+- Preserve API stability for shared modules so they can move to `packages/*` later without call-site changes.
+- For CMS-specific guardrails and boundaries, follow:
+  - `docs/cms/cms-engineering-guardrails.md`

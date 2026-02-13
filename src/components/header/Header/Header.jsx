@@ -12,20 +12,24 @@ import styles from "./header.module.css";
 
 export default function Header() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const isCmsRoute = pathname?.startsWith("/cms");
+  const [menuState, setMenuState] = useState({
+    isOpen: false,
+    openedOnPathname: null,
+  });
   const isContactPage = pathname === "/contact";
   const mobileNavId = "site-mobile-nav";
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+  const isOpen = menuState.isOpen && menuState.openedOnPathname === pathname;
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        setMenuState({
+          isOpen: false,
+          openedOnPathname: null,
+        });
       }
     };
 
@@ -37,6 +41,10 @@ export default function Header() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen]);
+
+  if (isCmsRoute) {
+    return null;
+  }
 
   return (
     <>
@@ -73,7 +81,15 @@ export default function Header() {
             <ThemeToggle />
             <MenuToggleButton
               isOpen={isOpen}
-              onToggle={() => setIsOpen((prev) => !prev)}
+              onToggle={() =>
+                setMenuState((prev) => {
+                  if (prev.isOpen && prev.openedOnPathname === pathname) {
+                    return { isOpen: false, openedOnPathname: null };
+                  }
+
+                  return { isOpen: true, openedOnPathname: pathname };
+                })
+              }
               controlsId={mobileNavId}
             />
           </div>
@@ -82,7 +98,12 @@ export default function Header() {
 
       <MobileMenuDrawer
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() =>
+          setMenuState({
+            isOpen: false,
+            openedOnPathname: null,
+          })
+        }
         pathname={pathname}
         controlsId={mobileNavId}
       />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Icon } from "../../primitives";
 import styles from "./scroll-to-top-button.module.css";
 
@@ -13,6 +14,8 @@ export default function ScrollToTopButton({
   ...props
 }) {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+  const isCmsRoute = pathname?.startsWith("/cms");
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -37,6 +40,10 @@ export default function ScrollToTopButton({
       behavior: prefersReducedMotion ? "auto" : "smooth",
     });
   };
+
+  if (isCmsRoute) {
+    return null;
+  }
 
   return (
     <button

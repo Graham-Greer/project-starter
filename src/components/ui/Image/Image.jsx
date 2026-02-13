@@ -45,6 +45,11 @@ export default function Image({
   const preset = KIND_PRESETS[kind] || KIND_PRESETS.content;
   const resolvedAspectRatio = aspectRatio ?? preset.aspectRatio;
   const resolvedObjectFit = objectFit ?? preset.objectFit;
+  const hasValidSrc = typeof src === "string" ? src.trim().length > 0 : Boolean(src);
+
+  if (!hasValidSrc) {
+    return null;
+  }
 
   const wrapperStyle = {
     "--image-aspect-ratio": resolvedAspectRatio,

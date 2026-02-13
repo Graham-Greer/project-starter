@@ -32,6 +32,16 @@ const ICONS = {
   ),
   minus: <path d="M5 12h14" />,
   arrowRight: <path d="M5 12h12m0 0-4-4m4 4-4 4" />,
+  gripVertical: (
+    <>
+      <circle cx="9" cy="6.5" r="1.2" />
+      <circle cx="15" cy="6.5" r="1.2" />
+      <circle cx="9" cy="12" r="1.2" />
+      <circle cx="15" cy="12" r="1.2" />
+      <circle cx="9" cy="17.5" r="1.2" />
+      <circle cx="15" cy="17.5" r="1.2" />
+    </>
+  ),
 };
 
 export default function Icon({

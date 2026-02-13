@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styles from "./tabs.module.css";
 
 function getInitialTab(items, candidate) {
@@ -23,13 +23,6 @@ export default function Tabs({
   const [internalValue, setInternalValue] = useState(() => getInitialTab(items, defaultValue));
   const tabsRef = useRef({});
   const currentValue = getInitialTab(items, isControlled ? value : internalValue);
-
-  useEffect(() => {
-    if (!isControlled && !currentValue && items.length > 0) {
-      const fallback = getInitialTab(items);
-      setInternalValue(fallback);
-    }
-  }, [currentValue, isControlled, items]);
 
   const enabledItems = useMemo(() => items.filter((item) => !item.disabled), [items]);
 

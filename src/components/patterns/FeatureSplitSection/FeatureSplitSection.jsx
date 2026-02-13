@@ -1,3 +1,4 @@
+import { isValidElement } from "react";
 import { Button, Image } from "../../ui";
 import { Heading, Stack, Text } from "../../primitives";
 import styles from "./feature-split-section.module.css";
@@ -42,9 +43,9 @@ export default function FeatureSplitSection({
             aspectRatio={media.aspectRatio || "16 / 9"}
             radius="lg"
           />
-        ) : (
+        ) : isValidElement(media) ? (
           media
-        )}
+        ) : null}
       </div>
     </div>
   );

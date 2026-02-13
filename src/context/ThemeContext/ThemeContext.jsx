@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const THEME_STORAGE_KEY = "theme-preference";
 
@@ -18,9 +19,24 @@ function clearDomTheme() {
   delete document.documentElement.dataset.theme;
 }
 
+function getStoredThemePreference() {
+  if (typeof window === "undefined") return null;
+  const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  return storedTheme === "light" || storedTheme === "dark" ? storedTheme : null;
+}
+
+function getInitialTheme() {
+  if (typeof window === "undefined") return "light";
+  return getStoredThemePreference() || getSystemTheme();
+}
+
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
-  const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [theme, setTheme] = useState(getInitialTheme);
+  const [isMounted] = useState(true);
+  const isCmsPreviewRoute = pathname?.startsWith("/cms/preview/");
+  const forcedPreviewTheme = isCmsPreviewRoute ? (searchParams?.get("theme") === "dark" ? "dark" : "light") : null;
 
   const setThemePreference = useCallback((nextTheme) => {
     setDomTheme(nextTheme);
@@ -39,18 +55,19 @@ export function ThemeProvider({ children }) {
   }, [theme, setThemePreference]);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (forcedPreviewTheme) {
+      setDomTheme(forcedPreviewTheme);
+      return undefined;
+    }
 
-    if (storedTheme === "light" || storedTheme === "dark") {
+    const storedTheme = getStoredThemePreference();
+    if (storedTheme) {
       setDomTheme(storedTheme);
-      setTheme(storedTheme);
-      setIsMounted(true);
       return undefined;
     }
 
     clearDomTheme();
-    setTheme(getSystemTheme());
-    setIsMounted(true);
+    setDomTheme(theme);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleMediaChange = () => {
@@ -61,7 +78,7 @@ export function ThemeProvider({ children }) {
     return () => {
       mediaQuery.removeEventListener("change", handleMediaChange);
     };
-  }, []);
+  }, [forcedPreviewTheme, theme]);
 
   const value = useMemo(
     () => ({
@@ -75,7 +92,7 @@ export function ThemeProvider({ children }) {
         toggleTheme,
       },
     }),
-    [theme, isMounted, setThemePreference, clearThemePreference, toggleTheme],
+    [theme, isMounted, setThemePreference, clearThemePreference, toggleTheme]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

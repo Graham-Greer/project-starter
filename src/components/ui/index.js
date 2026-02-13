@@ -6,3 +6,4 @@ export { default as Accordion } from "./Accordion";
 export { default as Tabs } from "./Tabs";
 export { default as LogoMarquee } from "./LogoMarquee";
 export { default as ScrollToTopButton } from "./ScrollToTopButton";
+export { default as ConfirmationModal } from "./ConfirmationModal";

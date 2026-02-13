@@ -1,0 +1,56 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay, 1000);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-bg) 20%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  width: min(100%, 32rem);
+  border: var(--space-px) solid var(--color-border);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.header {
+  padding: var(--space-5);
+  border-bottom: var(--space-px) solid var(--color-border-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+.description {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.content {
+  padding: var(--space-5);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: var(--space-px) solid var(--color-border-muted);
+}
+
+@media (max-width: 47.99rem) {
+  .actions {
+    flex-wrap: wrap;
+  }
+}

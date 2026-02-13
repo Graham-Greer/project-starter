@@ -7,6 +7,10 @@ This checklist tracks execution order for building and maintaining the reusable 
 - Mark items complete as work is merged.
 - Do not skip phases unless explicitly approved.
 - If a task introduces new patterns, update `docs/component-system-plan.md` and `docs/engineering-standards.md`.
+- CMS-specific planning/execution lives in `docs/cms/cms-implementation-checklist.md` and runs in parallel with this checklist.
+- Monorepo-separation guardrails for CMS/public-site evolution are defined in:
+  - `docs/engineering-standards.md` (Section 12)
+  - `docs/cms/cms-engineering-guardrails.md`
 
 ## Phase 0: Foundation Alignment
 
@@ -107,11 +111,19 @@ This checklist tracks execution order for building and maintaining the reusable 
 
 ## Phase 8: Database/Auth Readiness (Firebase-capable)
 
-- [ ] Define repository/service abstraction for data access in `src/lib/data`.
-- [ ] Ensure no direct DB calls from visual components.
-- [ ] Define auth boundary and route protection approach.
-- [ ] Define client/server data access rules (server preferred for sensitive operations).
-- [ ] Document data model and validation strategy.
+- [x] Draft CMS vision and planning docs in `docs/cms/`:
+  - `product-vision-cms.md`
+  - `cms-architecture.md`
+  - `cms-data-model.md`
+  - `cms-ai-workflows.md`
+  - `cms-implementation-checklist.md`
+- [x] Draft initial Firestore schema and section/variant registry contracts in `docs/cms/cms-data-model.md`.
+- [x] Define repository/service abstraction for data access in `src/lib/data`.
+- [x] Ensure no direct DB calls from visual components.
+- [x] Define auth boundary and route protection approach.
+- [x] Define client/server data access rules (server preferred for sensitive operations).
+- [x] Document data model and validation strategy.
+- [x] Establish CMS publish baseline (pre-publish checks, immutable snapshots, publish endpoint) tracked in `docs/cms/cms-implementation-checklist.md`.
 
 ## Phase 9: Quality Gates
 

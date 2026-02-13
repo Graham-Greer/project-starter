@@ -20,3 +20,4 @@ export { default as FeatureComparisonCompact } from "./FeatureComparisonCompact"
 export { default as FeatureComparisonDetailed } from "./FeatureComparisonDetailed";
 export { default as FooterCtaCentered } from "./FooterCtaCentered";
 export { default as FooterCtaSplit } from "./FooterCtaSplit";
+export { default as SectionRenderFallback } from "./SectionRenderFallback";

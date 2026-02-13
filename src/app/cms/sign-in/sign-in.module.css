@@ -1,0 +1,65 @@
+.page {
+  min-height: calc(100vh - var(--header-height));
+  display: grid;
+  place-items: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.card {
+  width: min(32rem, 100%);
+  background: var(--surface-1);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-8);
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-tight);
+}
+
+.description {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.fieldLabel {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.input {
+  width: 100%;
+  min-height: var(--space-10);
+  padding: 0 var(--space-3);
+  border: var(--space-px) solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 var(--space-px) var(--color-primary-500);
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
