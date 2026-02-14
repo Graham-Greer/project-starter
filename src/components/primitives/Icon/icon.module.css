@@ -1,7 +1,26 @@
 .icon {
-  width: var(--icon-size, 1rem);
-  height: var(--icon-size, 1rem);
+  width: 1em;
+  height: 1em;
   flex-shrink: 0;
   display: inline-block;
   vertical-align: middle;
+}
+
+.materialIcon {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: var(--icon-size, 1rem) !important;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga";
+  text-rendering: optimizeLegibility;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24 !important;
 }

@@ -50,20 +50,39 @@ export default function PageSectionsPanel({
               onDrop={(event) => onBlockDrop(event, block.id)}
               onDragEnd={onBlockDragEnd}
             >
-              <div className={styles.composerItemHeader}>
-                <span className={styles.composerGrabHandle} aria-hidden="true">
-                  <Icon name="gripVertical" size="0.95rem" />
-                </span>
-                <p className={styles.listTitle}>{sectionLabelForType(block.sectionType)}</p>
-                <p className={styles.status}>Variant: {formatVariantLabel(block.variant)}</p>
-              </div>
-              <div className={`${styles.row} ${styles.composerItemActions}`}>
-                <Button size="sm" variant={selectedBlockId === block.id ? "primary" : "secondary"} onClick={() => onSelectBlock(block.id)}>
-                  {selectedBlockId === block.id ? "Editing" : "Edit"}
-                </Button>
-                <Button size="sm" variant="secondary" tone="danger" onClick={() => onRemoveBlock(block.id)}>
-                  Remove
-                </Button>
+              <div className={styles.composerItemBody}>
+                <div className={styles.composerItemTopRow}>
+                  <div className={styles.composerItemHeader}>
+                    <span className={styles.composerGrabHandle} aria-hidden="true">
+                      <Icon name="gripVertical" size="0.95rem" />
+                    </span>
+                    <div className={styles.composerItemText}>
+                      <p className={styles.listTitle}>{sectionLabelForType(block.sectionType)}</p>
+                      <p className={styles.composerVariantText}>Variant: {formatVariantLabel(block.variant)}</p>
+                    </div>
+                  </div>
+                  <div className={styles.composerItemActions}>
+                    <Button
+                      size="sm"
+                      variant={selectedBlockId === block.id ? "primary" : "secondary"}
+                      iconOnly
+                      onClick={() => onSelectBlock(block.id)}
+                      aria-label={selectedBlockId === block.id ? "Editing section" : "Edit section"}
+                      title={selectedBlockId === block.id ? "Editing" : "Edit"}
+                      iconLeft={<Icon name="edit" size="1rem" decorative={true} />}
+                    />
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      tone="danger"
+                      iconOnly
+                      onClick={() => onRemoveBlock(block.id)}
+                      aria-label="Remove section"
+                      title="Remove"
+                      iconLeft={<Icon name="trash" size="1rem" decorative={true} />}
+                    />
+                  </div>
+                </div>
               </div>
             </li>
           ))}

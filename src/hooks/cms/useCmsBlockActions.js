@@ -22,7 +22,6 @@ export function useCmsBlockActions({
   setDraggedBlockId,
   setDragOverBlockId,
   setPreviewRefreshNonce,
-  setIsEditingPage,
   setPropsEditorMessage,
   setPreviewTheme,
   setPrePublishChecks,

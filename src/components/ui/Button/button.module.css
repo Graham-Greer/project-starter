@@ -46,6 +46,23 @@
   width: 100%;
 }
 
+.iconOnly {
+  padding: 0;
+  gap: 0;
+}
+
+.iconOnly.sm {
+  width: var(--space-8);
+}
+
+.iconOnly.md {
+  width: var(--space-10);
+}
+
+.iconOnly.lg {
+  width: var(--space-12);
+}
+
 .loading,
 .button:disabled {
   opacity: 0.7;

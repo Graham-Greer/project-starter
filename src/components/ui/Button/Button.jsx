@@ -23,6 +23,7 @@ export default function Button({
   disabled = false,
   loading = false,
   fullWidth = false,
+  iconOnly = false,
   iconLeft,
   iconRight,
   ...props
@@ -43,6 +44,7 @@ export default function Button({
     styles[size] || styles.md,
     styles[tone] || styles.neutral,
     fullWidth ? styles.fullWidth : "",
+    iconOnly ? styles.iconOnly : "",
     loading ? styles.loading : "",
     className,
   ]
@@ -52,7 +54,7 @@ export default function Button({
   const content = (
     <>
       {renderIcon(iconLeft)}
-      <span className={styles.label}>{children}</span>
+      {!iconOnly ? <span className={styles.label}>{children}</span> : null}
       {renderIcon(iconRight)}
     </>
   );

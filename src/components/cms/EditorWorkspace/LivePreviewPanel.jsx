@@ -24,15 +24,17 @@ export default function LivePreviewPanel({
           <Button size="sm" variant={previewViewport === "mobile" ? "primary" : "secondary"} onClick={() => setPreviewViewport("mobile")}>
             Mobile
           </Button>
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
+            iconOnly
             className={styles.previewThemeToggle}
             onClick={handleTogglePreviewTheme}
             aria-label={previewTheme === "dark" ? "Switch preview to light theme" : "Switch preview to dark theme"}
             title={previewTheme === "dark" ? "Switch preview to light theme" : "Switch preview to dark theme"}
-          >
-            <Icon name={previewTheme === "dark" ? "sun" : "moon"} className={styles.previewThemeIcon} decorative={true} />
-          </button>
+            iconLeft={<Icon name={previewTheme === "dark" ? "sun" : "moon"} className={styles.previewThemeIcon} decorative={true} />}
+          />
         </div>
       </div>
 

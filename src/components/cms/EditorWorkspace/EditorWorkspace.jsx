@@ -63,18 +63,6 @@ export default function EditorWorkspace({
       </div>
 
       <div className={styles.composerGrid}>
-        <VariantPickerPanel
-          styles={styles}
-          selectedSectionLabel={selectedSectionLabel}
-          selectedSectionVariants={selectedSectionVariants}
-          newBlockSectionType={newBlockSectionType}
-          newBlockVariant={newBlockVariant}
-          setNewBlockVariant={setNewBlockVariant}
-          formatVariantLabel={formatVariantLabel}
-          libraryPreviewBlock={libraryPreviewBlock}
-          selectedPageId={selectedPageId}
-          onAddBlock={onAddBlock}
-        />
         <PageSectionsPanel
           styles={styles}
           selectedPage={selectedPage}
@@ -95,6 +83,18 @@ export default function EditorWorkspace({
           onRemoveBlock={onRemoveBlock}
           sectionLabelForType={sectionLabelForType}
           formatVariantLabel={formatVariantLabel}
+        />
+        <VariantPickerPanel
+          styles={styles}
+          selectedSectionLabel={selectedSectionLabel}
+          selectedSectionVariants={selectedSectionVariants}
+          newBlockSectionType={newBlockSectionType}
+          newBlockVariant={newBlockVariant}
+          setNewBlockVariant={setNewBlockVariant}
+          formatVariantLabel={formatVariantLabel}
+          libraryPreviewBlock={libraryPreviewBlock}
+          selectedPageId={selectedPageId}
+          onAddBlock={onAddBlock}
         />
       </div>
 

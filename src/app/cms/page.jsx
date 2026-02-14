@@ -253,7 +253,6 @@ export default function CmsHomePage() {
     setDraggedBlockId,
     setDragOverBlockId,
     setPreviewRefreshNonce,
-    setIsEditingPage,
     setPropsEditorMessage,
     setPreviewTheme,
     setPrePublishChecks,
