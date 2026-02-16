@@ -1,5 +1,23 @@
 import { useCallback } from "react";
 import { CMS_STORAGE_KEYS } from "@/hooks/cms/useCmsWorkspaceState";
+import { getFirebaseClientAuth } from "@/lib/firebase/client";
+
+async function fetchCms(path, init = {}) {
+  const headers = new Headers(init?.headers || {});
+  try {
+    const token = await getFirebaseClientAuth()?.currentUser?.getIdToken();
+    if (token) {
+      headers.set("x-firebase-id-token", token);
+    }
+  } catch (_error) {
+    // Keep request moving; server cookie auth may still succeed.
+  }
+  return fetch(path, {
+    ...init,
+    headers,
+    credentials: "include",
+  });
+}
 
 export function useCmsWorkspacePageActions({
   isAuthenticated,
@@ -63,7 +81,7 @@ export function useCmsWorkspacePageActions({
     setPageTreeStatusMessage("");
 
     try {
-      const payload = await fetch(`/api/cms/sites/${siteId}/pages`).then((response) => response.json());
+      const payload = await fetchCms(`/api/cms/sites/${siteId}/pages`).then((response) => response.json());
       if (!payload?.ok) {
         throw new Error(payload?.error || "Failed to load pages for this site.");
       }
@@ -107,7 +125,7 @@ export function useCmsWorkspacePageActions({
     if (!siteId) return;
     setIsLoadingPageList(true);
     try {
-      const payload = await fetch(`/api/cms/sites/${siteId}/pages?page=${page}&pageSize=${pageSize}`).then((response) => response.json());
+      const payload = await fetchCms(`/api/cms/sites/${siteId}/pages?page=${page}&pageSize=${pageSize}`).then((response) => response.json());
       if (!payload?.ok) {
         throw new Error(payload?.error || "Failed to load paginated pages.");
       }
@@ -136,8 +154,8 @@ export function useCmsWorkspacePageActions({
 
     try {
       const [accessPayload, sitesPayload] = await Promise.all([
-        fetch(`/api/cms/workspaces/${nextWorkspaceId}/access`).then((response) => response.json()),
-        fetch(`/api/cms/workspaces/${nextWorkspaceId}/sites`).then((response) => response.json()),
+        fetchCms(`/api/cms/workspaces/${nextWorkspaceId}/access`).then((response) => response.json()),
+        fetchCms(`/api/cms/workspaces/${nextWorkspaceId}/sites`).then((response) => response.json()),
       ]);
 
       if (!accessPayload?.ok) {
@@ -222,7 +240,7 @@ export function useCmsWorkspacePageActions({
     if (!workspaceId) return;
     setSiteStatusMessage("");
 
-    const response = await fetch(`/api/cms/workspaces/${workspaceId}/sites`, {
+    const response = await fetchCms(`/api/cms/workspaces/${workspaceId}/sites`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -290,7 +308,7 @@ export function useCmsWorkspacePageActions({
     if (!selectedSiteId) return;
     setPageStatusMessage("");
 
-    const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages`, {
+    const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -345,7 +363,7 @@ export function useCmsWorkspacePageActions({
     setDidUpdatePage(false);
     setIsUpdatingPage(true);
     try {
-      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}`, {
+      const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -438,7 +456,7 @@ export function useCmsWorkspacePageActions({
   const handleDeletePage = useCallback(async (pageId) => {
     if (!selectedSiteId || !pageId) return;
 
-    const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${pageId}`, {
+    const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${pageId}`, {
       method: "DELETE",
     });
     const payload = await response.json();
@@ -471,7 +489,7 @@ export function useCmsWorkspacePageActions({
     if (!selectedSiteId || !pageId) return;
     setPageStatusMessage("");
 
-    const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${pageId}/clone`, {
+    const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${pageId}/clone`, {
       method: "POST",
     });
     const payload = await response.json();
@@ -504,7 +522,7 @@ export function useCmsWorkspacePageActions({
     setPrePublishChecks([]);
 
     try {
-      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/prepublish`);
+      const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/prepublish`);
       const payload = await response.json();
       if (!payload?.ok) {
         setPrePublishStatusMessage(payload?.error || "Failed to run pre-publish checks.");
@@ -532,7 +550,7 @@ export function useCmsWorkspacePageActions({
     setDidPublishPage(false);
 
     try {
-      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/publish`, {
+      const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/publish`, {
         method: "POST",
       });
       const payload = await response.json();
