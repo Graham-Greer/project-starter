@@ -9,15 +9,24 @@ const TOKEN_REFRESH_INTERVAL_MS = 15 * 60 * 1000;
 
 async function syncSessionCookie(idToken) {
   if (!idToken) {
-    await fetch("/api/cms/auth/session", { method: "DELETE" });
+    await fetch("/api/cms/auth/session", {
+      method: "DELETE",
+      credentials: "include",
+    });
     return;
   }
 
-  await fetch("/api/cms/auth/session", {
+  const response = await fetch("/api/cms/auth/session", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken }),
   });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload?.error || "Failed to sync auth session");
+  }
 }
 
 export function CmsAuthProvider({ children }) {

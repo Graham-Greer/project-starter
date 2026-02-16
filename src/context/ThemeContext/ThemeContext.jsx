@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const THEME_STORAGE_KEY = "theme-preference";
 
@@ -32,11 +32,9 @@ function getInitialTheme() {
 
 export function ThemeProvider({ children }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [theme, setTheme] = useState(getInitialTheme);
   const [isMounted] = useState(true);
   const isCmsPreviewRoute = pathname?.startsWith("/cms/preview/");
-  const forcedPreviewTheme = isCmsPreviewRoute ? (searchParams?.get("theme") === "dark" ? "dark" : "light") : null;
 
   const setThemePreference = useCallback((nextTheme) => {
     setDomTheme(nextTheme);
@@ -55,6 +53,12 @@ export function ThemeProvider({ children }) {
   }, [theme, setThemePreference]);
 
   useEffect(() => {
+    const forcedPreviewTheme = (() => {
+      if (!isCmsPreviewRoute || typeof window === "undefined") return null;
+      const params = new URLSearchParams(window.location.search);
+      return params.get("theme") === "dark" ? "dark" : "light";
+    })();
+
     if (forcedPreviewTheme) {
       setDomTheme(forcedPreviewTheme);
       return undefined;
@@ -78,7 +82,7 @@ export function ThemeProvider({ children }) {
     return () => {
       mediaQuery.removeEventListener("change", handleMediaChange);
     };
-  }, [forcedPreviewTheme, theme]);
+  }, [isCmsPreviewRoute, theme]);
 
   const value = useMemo(
     () => ({

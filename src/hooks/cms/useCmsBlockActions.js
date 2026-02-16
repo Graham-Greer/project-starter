@@ -1,5 +1,21 @@
 import { useCallback } from "react";
 import { buildSchemaTemplate } from "@/lib/cms/cms-utils";
+import { getFirebaseClientAuth } from "@/lib/firebase/client";
+
+async function fetchCms(path, init = {}) {
+  const headers = new Headers(init?.headers || {});
+  try {
+    const token = await getFirebaseClientAuth()?.currentUser?.getIdToken();
+    if (token) headers.set("x-firebase-id-token", token);
+  } catch (_error) {
+    // Fall back to cookie-based auth when token header is unavailable.
+  }
+  return fetch(path, {
+    ...init,
+    headers,
+    credentials: "include",
+  });
+}
 
 function sanitizeLegacyPlaceholders(value) {
   if (typeof value === "string") {
@@ -135,7 +151,7 @@ export function useCmsBlockActions({
     setBlockValidationErrorsById({});
     setIsSavingBlocks(true);
     try {
-      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/blocks`, {
+      const response = await fetchCms(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/blocks`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ blocks: normalizedBlocks }),
@@ -225,7 +241,7 @@ export function useCmsBlockActions({
     setSelectedBlockId("");
 
     try {
-      const payload = await fetch(`/api/cms/sites/${siteId}/pages/${pageId}/blocks`).then((response) => response.json());
+      const payload = await fetchCms(`/api/cms/sites/${siteId}/pages/${pageId}/blocks`).then((response) => response.json());
       if (!payload?.ok) {
         throw new Error(payload?.error || "Failed to load page blocks.");
       }
