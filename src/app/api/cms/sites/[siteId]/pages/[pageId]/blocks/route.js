@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ForbiddenError, UnauthorizedError, getRequestUser } from "@/lib/auth";
+import { safeWriteCmsAuditLog } from "@/lib/cms/audit-log";
 import { createSecureCmsDataServices } from "@/lib/data";
 import { validateBlock } from "@/lib/validation";
 
@@ -78,6 +79,22 @@ export async function PUT(request, { params }) {
       draftVersion: (existingPage.draftVersion || 1) + 1,
       updatedAt: now,
       updatedBy: user.uid,
+    });
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId: existingPage.workspaceId,
+      actorUserId: user.uid,
+      action: "page.blocks.saved",
+      entityType: "page",
+      entityId: pageId,
+      siteId,
+      pageId,
+      summary: `Saved blocks for page "${existingPage.title || pageId}"`,
+      metadata: {
+        blockCount: blocks.length,
+        draftVersion: (existingPage.draftVersion || 1) + 1,
+      },
+      createdAt: now,
     });
 
     return NextResponse.json({

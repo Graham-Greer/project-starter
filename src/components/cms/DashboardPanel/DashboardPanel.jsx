@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui";
+import { useState } from "react";
 
 export default function DashboardPanel({
   styles,
@@ -13,7 +14,19 @@ export default function DashboardPanel({
   selectedSiteId,
   onSelectSite,
   onToggleDashboardAction,
+  onViewActivity,
+  onViewAlerts,
+  onUpdateSiteRuntimeMode,
+  isUpdatingSiteRuntime,
 }) {
+  const [runtimeModeDraftBySiteId, setRuntimeModeDraftBySiteId] = useState({});
+  const selectedSiteRuntimeMode = selectedSite?.runtimeMode || "static";
+  const runtimeModeInput = selectedSite?.id
+    ? runtimeModeDraftBySiteId[selectedSite.id] || selectedSiteRuntimeMode
+    : selectedSiteRuntimeMode;
+
+  const runtimeModeChanged = runtimeModeInput !== selectedSiteRuntimeMode;
+
   return (
     <section id="dashboard-context" className={styles.panel}>
       <div className={styles.dashboardHeader}>
@@ -38,6 +51,56 @@ export default function DashboardPanel({
             Add site
           </Button>
         </div>
+        <div className={styles.dashboardItem}>
+          <span className={styles.dashboardLabel}>Site activity</span>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={onViewActivity}
+            disabled={!workspaceId}
+          >
+            View audits
+          </Button>
+        </div>
+        <div className={styles.dashboardItem}>
+          <span className={styles.dashboardLabel}>System alerts</span>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={onViewAlerts}
+            disabled={!workspaceId}
+          >
+            View alerts
+          </Button>
+        </div>
+        {selectedSite ? (
+          <div className={styles.dashboardRuntimeRow}>
+            <label className={styles.label}>
+              Runtime mode
+              <select
+                className={styles.input}
+                value={runtimeModeInput}
+                onChange={(event) => {
+                  const nextMode = event.target.value;
+                  if (!selectedSite?.id) return;
+                  setRuntimeModeDraftBySiteId((prev) => ({ ...prev, [selectedSite.id]: nextMode }));
+                }}
+                disabled={isUpdatingSiteRuntime}
+              >
+                <option value="static">Static</option>
+                <option value="cms-live">CMS live</option>
+              </select>
+            </label>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => onUpdateSiteRuntimeMode(runtimeModeInput)}
+              disabled={!runtimeModeChanged || isUpdatingSiteRuntime}
+            >
+              {isUpdatingSiteRuntime ? "Updating..." : "Update mode"}
+            </Button>
+          </div>
+        ) : null}
         {sites.length > 1 ? (
           <label className={styles.label}>
             Active site

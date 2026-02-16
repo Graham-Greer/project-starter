@@ -60,8 +60,49 @@ Roles: `owner | admin | editor | viewer`
   "name": "Acme Marketing Site",
   "slug": "acme-site",
   "status": "draft",
+  "runtimeMode": "static",
   "templateId": "base-template-v1",
   "themeId": "default-light-dark",
+  "header": {
+    "variant": "simple",
+    "overlayMode": "off",
+    "sticky": true,
+    "mobilePattern": "drawer",
+    "primaryAction": null,
+    "secondaryAction": null
+  },
+  "headers": [
+    {
+      "id": "header-default",
+      "name": "Default header",
+      "config": {
+        "variant": "simple",
+        "overlayMode": "off",
+        "sticky": true,
+        "mobilePattern": "drawer",
+        "primaryAction": null,
+        "secondaryAction": null
+      }
+    }
+  ],
+  "activeHeaderId": "header-default",
+  "navigation": {
+    "primary": [
+      {
+        "id": "nav-1",
+        "label": "Home",
+        "type": "page",
+        "pageId": "home",
+        "href": "",
+        "visible": true,
+        "openInNewTab": false,
+        "order": 0,
+        "children": []
+      }
+    ],
+    "footer": [],
+    "legal": []
+  },
   "brand": {
     "logo": { "assetId": "asset_logo_1", "url": "..." },
     "colors": {
@@ -99,6 +140,8 @@ Roles: `owner | admin | editor | viewer`
     "metaDescription": "Plans and pricing for ...",
     "ogImage": "..."
   },
+  "headerMode": "inherit",
+  "headerPresetId": "",
   "blocks": [
     {
       "id": "block_hero_01",

@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
-import { ForbiddenError, UnauthorizedError } from "@/lib/auth";
+import { ForbiddenError, UnauthorizedError, getRequestUser } from "@/lib/auth";
+import { safeWriteCmsAuditLog } from "@/lib/cms/audit-log";
+import {
+  getDefaultHeaderConfig,
+  getDefaultHeaderPreset,
+  getDefaultNavigationConfig,
+  resolveSiteRuntimeConfig,
+} from "@/lib/cms/site-config";
 import { createSecureCmsDataServices } from "@/lib/data";
 
 function toSlug(value = "") {
@@ -19,12 +26,18 @@ function validateSitePayload(payload) {
 
 function toSiteResponse(site) {
   if (!site) return null;
+  const runtimeConfig = resolveSiteRuntimeConfig(site);
   return {
     id: site.id,
     workspaceId: site.workspaceId,
     name: site.name,
     slug: site.slug,
     status: site.status,
+    runtimeMode: site.runtimeMode || "static",
+    header: runtimeConfig.header,
+    headers: runtimeConfig.headers,
+    activeHeaderId: runtimeConfig.activeHeaderId,
+    navigation: runtimeConfig.navigation,
     templateId: site.templateId,
     updatedAt: site.updatedAt,
     createdAt: site.createdAt,
@@ -68,12 +81,18 @@ export async function POST(request, { params }) {
     }
 
     const now = new Date().toISOString();
+    const user = await getRequestUser({ required: true });
     const siteId = `${workspaceId}__${slug}`;
     const sitePayload = {
       workspaceId,
       name: payload.name.trim(),
       slug,
       status: "draft",
+      runtimeMode: "static",
+      header: getDefaultHeaderConfig(),
+      headers: [getDefaultHeaderPreset()],
+      activeHeaderId: "header-default",
+      navigation: getDefaultNavigationConfig(),
       templateId: payload.templateId || "base-template-v1",
       themeId: payload.themeId || "default-light-dark",
       createdAt: now,
@@ -88,6 +107,21 @@ export async function POST(request, { params }) {
 
     await cms.sites.createSite(siteId, sitePayload);
     const created = await cms.sites.getSiteById(siteId);
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId,
+      actorUserId: user.uid,
+      action: "site.created",
+      entityType: "site",
+      entityId: siteId,
+      siteId,
+      summary: `Created site "${sitePayload.name}"`,
+      metadata: {
+        slug: sitePayload.slug,
+        runtimeMode: sitePayload.runtimeMode,
+      },
+      createdAt: now,
+    });
 
     return NextResponse.json({ ok: true, site: toSiteResponse(created) }, { status: 201 });
   } catch (error) {

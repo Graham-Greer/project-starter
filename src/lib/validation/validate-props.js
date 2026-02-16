@@ -2,6 +2,16 @@ function isObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function isMissingRequiredValue(value, rule) {
+  if (value === undefined || value === null) return true;
+  if (typeof value === "string") {
+    const normalized = value.trim();
+    return normalized === "" || normalized.toLowerCase() === "placeholder";
+  }
+  if (rule?.type === "array") return !Array.isArray(value) || value.length === 0;
+  return false;
+}
+
 function validateFieldValue(value, rule, fieldName) {
   if (value === undefined || value === null) return [];
 
@@ -51,6 +61,13 @@ function validateFieldValue(value, rule, fieldName) {
       errors.push(`${fieldName} must be an object`);
       return errors;
     }
+    const requiredFields = Array.isArray(rule.required) ? rule.required : [];
+    requiredFields.forEach((childField) => {
+      const childRule = rule?.fields?.[childField];
+      if (isMissingRequiredValue(value[childField], childRule)) {
+        errors.push(`${fieldName}.${childField} is required`);
+      }
+    });
     if (rule.fields && isObject(rule.fields)) {
       Object.entries(rule.fields).forEach(([childField, childRule]) => {
         errors.push(...validateFieldValue(value[childField], childRule, `${fieldName}.${childField}`));
@@ -78,12 +95,21 @@ export function validateProps(props = {}, schema = {}) {
 
   required.forEach((fieldName) => {
     const value = props[fieldName];
-    const missing = value === undefined || value === null || value === "";
+    const fieldRule = fieldRules[fieldName];
+    const missing = isMissingRequiredValue(value, fieldRule);
     if (missing) errors.push(`${fieldName} is required`);
   });
 
   Object.entries(fieldRules).forEach(([fieldName, rule]) => {
-    errors.push(...validateFieldValue(props[fieldName], rule, fieldName));
+    const value = props[fieldName];
+    const isTopLevelRequired = required.includes(fieldName);
+    const isOptionalEmptyObject = !isTopLevelRequired
+      && rule?.type === "object"
+      && isObject(value)
+      && Object.keys(value).length === 0;
+
+    if (isOptionalEmptyObject) return;
+    errors.push(...validateFieldValue(value, rule, fieldName));
   });
 
   return {

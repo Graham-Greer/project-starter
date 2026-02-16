@@ -12,5 +12,13 @@ export function createSiteRepository({ adapter }) {
     async listWorkspaceSites(workspaceId) {
       return adapter.listDocuments({ collection: "sites", where: [["workspaceId", "==", workspaceId]] });
     },
+    async listSitesBySlug(slug) {
+      return adapter.listDocuments({ collection: "sites", where: [["slug", "==", slug]] });
+    },
+    async getSiteBySlug(slug) {
+      const matches = await adapter.listDocuments({ collection: "sites", where: [["slug", "==", slug]] });
+      if (!matches.length) return null;
+      return matches[0];
+    },
   };
 }

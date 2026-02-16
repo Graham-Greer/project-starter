@@ -16,7 +16,7 @@ export default function FooterColumns({ brand = "Starter", description, columns 
               <Heading as="p" size="h6" weight="semibold">{column.title}</Heading>
               <ul className={styles.list}>
                 {(column.links || []).map((link, linkIndex) => (
-                  <li key={link.href || linkIndex}>
+                  <li key={`${link.label || "link"}-${link.href || "#"}-${linkIndex}`}>
                     <Link href={link.href || "#"} className={styles.link}>{link.label}</Link>
                   </li>
                 ))}

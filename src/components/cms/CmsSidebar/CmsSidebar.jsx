@@ -1,11 +1,12 @@
 import DashboardActionPanel from "@/components/cms/DashboardActionPanel/DashboardActionPanel";
 import DashboardPanel from "@/components/cms/DashboardPanel/DashboardPanel";
 import PageSettingsPanel from "@/components/cms/PageSettingsPanel/PageSettingsPanel";
-import SectionLibraryPanel from "@/components/cms/SectionLibraryPanel/SectionLibraryPanel";
 
 export default function CmsSidebar({
   styles,
   isEditingPage,
+  mainView,
+  onChangeMainView,
   workspaceId,
   workspaceAccess,
   selectedSite,
@@ -18,6 +19,10 @@ export default function CmsSidebar({
   onSelectSite,
   activeDashboardAction,
   onToggleDashboardAction,
+  onViewActivity,
+  onViewAlerts,
+  onUpdateSiteRuntimeMode,
+  isUpdatingSiteRuntime,
   onWorkspaceSubmit,
   workspaceIdInput,
   onWorkspaceIdChange,
@@ -48,23 +53,30 @@ export default function CmsSidebar({
   onPageSettingsMetaDescriptionChange,
   pageSettingsOgImageUrlInput,
   onPageSettingsOgImageUrlChange,
+  onOpenOgImageMediaPicker,
   onRunPrePublishValidation,
   isRunningPrePublishValidation,
   prePublishStatusMessage,
   prePublishChecks,
   onPublishPage,
   isPublishingPage,
+  onUnpublishPage,
+  isUnpublishingPage,
   publishStatusMessage,
   didPublishPage,
+  publishHistoryEntries,
+  isLoadingPublishHistory,
+  isRollingBackPublish,
+  publishHistoryStatusMessage,
+  onLoadPublishHistory,
+  onRollbackPageVersion,
   moveParentPageIdInput,
   onMoveParentPageIdChange,
   availableParentPages,
   isUpdatingPage,
   didUpdatePage,
-  sectionTypes,
-  newBlockSectionType,
-  onSelectSectionType,
-  getSectionLabel,
+  onOpenNavigationSettings,
+  onOpenMediaLibrary,
 }) {
   return (
     <aside className={styles.sidebar}>
@@ -83,6 +95,10 @@ export default function CmsSidebar({
             selectedSiteId={selectedSiteId}
             onSelectSite={onSelectSite}
             onToggleDashboardAction={onToggleDashboardAction}
+            onViewActivity={onViewActivity}
+            onViewAlerts={onViewAlerts}
+            onUpdateSiteRuntimeMode={onUpdateSiteRuntimeMode}
+            isUpdatingSiteRuntime={isUpdatingSiteRuntime}
           />
           <DashboardActionPanel
             styles={styles}
@@ -107,6 +123,35 @@ export default function CmsSidebar({
             selectedSitePages={selectedSitePages}
             onCloseAction={onCloseAction}
           />
+
+          <section className={styles.panel}>
+            <h2 className={styles.panelTitle}>Content</h2>
+            <div className={styles.sidebarViewNav}>
+              <button
+                type="button"
+                className={`${styles.sidebarViewNavButton} ${mainView === "pages" ? styles.sidebarViewNavButtonActive : ""}`.trim()}
+                onClick={() => onChangeMainView("pages")}
+              >
+                Pages
+              </button>
+              <button
+                type="button"
+                className={`${styles.sidebarViewNavButton} ${mainView === "navigation" ? styles.sidebarViewNavButtonActive : ""}`.trim()}
+                onClick={() => onChangeMainView("navigation")}
+                disabled={!selectedSiteId}
+              >
+                Navigation
+              </button>
+              <button
+                type="button"
+                className={`${styles.sidebarViewNavButton} ${mainView === "media" ? styles.sidebarViewNavButtonActive : ""}`.trim()}
+                onClick={() => onChangeMainView("media")}
+                disabled={!selectedSiteId}
+              >
+                Media
+              </button>
+            </div>
+          </section>
         </>
       ) : null}
 
@@ -127,26 +172,30 @@ export default function CmsSidebar({
             onPageSettingsMetaDescriptionChange={onPageSettingsMetaDescriptionChange}
             pageSettingsOgImageUrlInput={pageSettingsOgImageUrlInput}
             onPageSettingsOgImageUrlChange={onPageSettingsOgImageUrlChange}
+            onOpenOgImageMediaPicker={onOpenOgImageMediaPicker}
             onRunPrePublishValidation={onRunPrePublishValidation}
             isRunningPrePublishValidation={isRunningPrePublishValidation}
             prePublishStatusMessage={prePublishStatusMessage}
             prePublishChecks={prePublishChecks}
             onPublishPage={onPublishPage}
             isPublishingPage={isPublishingPage}
+            onUnpublishPage={onUnpublishPage}
+            isUnpublishingPage={isUnpublishingPage}
             publishStatusMessage={publishStatusMessage}
             didPublishPage={didPublishPage}
+            publishHistoryEntries={publishHistoryEntries}
+            isLoadingPublishHistory={isLoadingPublishHistory}
+            isRollingBackPublish={isRollingBackPublish}
+            publishHistoryStatusMessage={publishHistoryStatusMessage}
+            onLoadPublishHistory={onLoadPublishHistory}
+            onRollbackPageVersion={onRollbackPageVersion}
             moveParentPageIdInput={moveParentPageIdInput}
             onMoveParentPageIdChange={onMoveParentPageIdChange}
             availableParentPages={availableParentPages}
             isUpdatingPage={isUpdatingPage}
             didUpdatePage={didUpdatePage}
-          />
-          <SectionLibraryPanel
-            styles={styles}
-            sectionTypes={sectionTypes}
-            newBlockSectionType={newBlockSectionType}
-            onSelectSectionType={onSelectSectionType}
-            getSectionLabel={getSectionLabel}
+            onOpenNavigationSettings={onOpenNavigationSettings}
+            onOpenMediaLibrary={onOpenMediaLibrary}
           />
         </>
       ) : null}

@@ -84,6 +84,10 @@ This checklist tracks execution order for building and maintaining the reusable 
 ## Phase 6: Section Variants
 
 - [x] Build Hero variants (`HeroCentered`, `HeroSplit`).
+- [ ] Build Header variants for CMS/site assembly (core pending):
+  - `HeaderSimple`
+  - `HeaderWithCta`
+  - `HeaderWithMegaMenu` (optional follow-on after core two variants)
 - [x] Build Footer variants (`FooterSimple`, `FooterColumns`).
 - [x] Build at least one feature/testimonial section variant.
 - [x] Ensure section props are data-driven and variant-based.
@@ -124,6 +128,7 @@ This checklist tracks execution order for building and maintaining the reusable 
 - [x] Define client/server data access rules (server preferred for sensitive operations).
 - [x] Document data model and validation strategy.
 - [x] Establish CMS publish baseline (pre-publish checks, immutable snapshots, publish endpoint) tracked in `docs/cms/cms-implementation-checklist.md`.
+- [ ] Implement CMS media-library foundation before AI features (tracked in `docs/cms/cms-media-library-checklist.md`).
 
 ## Phase 9: Quality Gates
 

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { ForbiddenError, UnauthorizedError, getRequestUser } from "@/lib/auth";
+import { safeWriteCmsAuditLog } from "@/lib/cms/audit-log";
+import { resolveMediaAssetUrl } from "@/lib/cms/media-assets";
+import { resolveSiteRuntimeConfig } from "@/lib/cms/site-config";
 import { createSecureCmsDataServices } from "@/lib/data";
 import { validateImageUrlReachable, validateSeoPayload } from "@/lib/validation/seo";
 
@@ -73,7 +76,10 @@ function toPageResponse(page) {
       metaTitle: page?.seo?.metaTitle || page.title || "",
       metaDescription: page?.seo?.metaDescription || "",
       ogImageUrl: page?.seo?.ogImageUrl || "",
+      ogImageAssetId: page?.seo?.ogImageAssetId || "",
     },
+    headerMode: page?.headerMode === "override" ? "override" : "inherit",
+    headerPresetId: typeof page?.headerPresetId === "string" ? page.headerPresetId : "",
     status: page.status,
     hasUnpublishedChanges: Boolean(page?.hasUnpublishedChanges),
     draftVersion: page.draftVersion,
@@ -91,6 +97,12 @@ export async function PATCH(request, { params }) {
       : null;
 
     const cms = createSecureCmsDataServices();
+    const site = await cms.sites.getSiteById(siteId);
+    if (!site) {
+      return NextResponse.json({ ok: false, error: `Site "${siteId}" not found.` }, { status: 404 });
+    }
+    const runtimeConfig = resolveSiteRuntimeConfig(site);
+    const siteHeaderIds = new Set((runtimeConfig.headers || []).map((preset) => preset.id));
     const targetPage = await cms.pages.getPage(siteId, pageId);
     if (!targetPage) {
       return NextResponse.json({ ok: false, error: `Page "${pageId}" not found.` }, { status: 404 });
@@ -107,12 +119,25 @@ export async function PATCH(request, { params }) {
       metaTitle: typeof payload?.seo?.metaTitle === "string" ? payload.seo.metaTitle : (targetPage?.seo?.metaTitle || nextTitle),
       metaDescription: typeof payload?.seo?.metaDescription === "string" ? payload.seo.metaDescription : (targetPage?.seo?.metaDescription || ""),
       ogImageUrl: typeof payload?.seo?.ogImageUrl === "string" ? payload.seo.ogImageUrl : (targetPage?.seo?.ogImageUrl || ""),
+      ogImageAssetId: typeof payload?.seo?.ogImageAssetId === "string" ? payload.seo.ogImageAssetId : (targetPage?.seo?.ogImageAssetId || ""),
     });
     if (!seoValidation.valid) {
       return NextResponse.json({ ok: false, error: seoValidation.error }, { status: 400 });
     }
-    if (seoValidation.seo.ogImageUrl) {
-      const ogValidation = await validateImageUrlReachable(seoValidation.seo.ogImageUrl);
+    let nextOgImageUrl = seoValidation.seo.ogImageUrl;
+    const nextOgImageAssetId = seoValidation.seo.ogImageAssetId || "";
+    if (nextOgImageAssetId) {
+      const asset = await cms.assets.getAssetById(nextOgImageAssetId);
+      if (!asset || asset.workspaceId !== site.workspaceId || asset.siteId !== siteId) {
+        return NextResponse.json({ ok: false, error: "Selected OG image media asset is missing or not available for this site." }, { status: 400 });
+      }
+      if (!String(asset.contentType || "").startsWith("image/")) {
+        return NextResponse.json({ ok: false, error: "Selected OG image media asset must be an image." }, { status: 400 });
+      }
+      nextOgImageUrl = resolveMediaAssetUrl(asset, { siteSlug: site.slug || "" });
+    }
+    if (nextOgImageUrl && !nextOgImageAssetId) {
+      const ogValidation = await validateImageUrlReachable(nextOgImageUrl);
       if (!ogValidation.valid) {
         return NextResponse.json({ ok: false, error: ogValidation.error }, { status: 400 });
       }
@@ -151,6 +176,17 @@ export async function PATCH(request, { params }) {
       );
     }
 
+    const nextHeaderMode = payload?.headerMode === "override" ? "override" : "inherit";
+    const nextHeaderPresetId = typeof payload?.headerPresetId === "string" ? payload.headerPresetId.trim() : "";
+    if (nextHeaderMode === "override") {
+      if (!nextHeaderPresetId) {
+        return NextResponse.json({ ok: false, error: "headerPresetId is required when headerMode is override." }, { status: 400 });
+      }
+      if (!siteHeaderIds.has(nextHeaderPresetId)) {
+        return NextResponse.json({ ok: false, error: `headerPresetId "${nextHeaderPresetId}" is not valid for this site.` }, { status: 400 });
+      }
+    }
+
     const parentChanged = (targetPage.parentPageId || null) !== nextParentPageId;
     const siblings = pages.filter((page) => (page.parentPageId || null) === (nextParentPageId || null) && page.id !== pageId);
     const now = new Date().toISOString();
@@ -160,11 +196,14 @@ export async function PATCH(request, { params }) {
       ...targetPage,
       title: nextTitle,
       slug: nextSlug,
-      seo: {
-        metaTitle: seoValidation.seo.metaTitle,
-        metaDescription: seoValidation.seo.metaDescription,
-        ogImageUrl: seoValidation.seo.ogImageUrl,
-      },
+          seo: {
+            metaTitle: seoValidation.seo.metaTitle,
+            metaDescription: seoValidation.seo.metaDescription,
+            ogImageUrl: nextOgImageUrl,
+            ogImageAssetId: nextOgImageAssetId,
+          },
+      headerMode: nextHeaderMode,
+      headerPresetId: nextHeaderMode === "override" ? nextHeaderPresetId : "",
       parentPageId: nextParentPageId,
       order: parentChanged ? siblings.length : (typeof targetPage.order === "number" ? targetPage.order : 0),
       updatedAt: now,
@@ -191,6 +230,23 @@ export async function PATCH(request, { params }) {
     }
 
     const refreshedPage = await cms.pages.getPage(siteId, pageId);
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId: site.workspaceId,
+      actorUserId: user.uid,
+      action: "page.updated",
+      entityType: "page",
+      entityId: pageId,
+      siteId,
+      pageId,
+      summary: `Updated page "${nextTitle}"`,
+      metadata: {
+        slug: nextSlug,
+        parentPageId: nextParentPageId || "",
+        headerMode: nextHeaderMode,
+      },
+      createdAt: now,
+    });
     return NextResponse.json({
       ok: true,
       page: toPageResponse(refreshedPage),
@@ -210,6 +266,8 @@ export async function DELETE(_request, { params }) {
   try {
     const { siteId, pageId } = await params;
     const cms = createSecureCmsDataServices();
+    const user = await getRequestUser({ required: true });
+    const now = new Date().toISOString();
     const targetPage = await cms.pages.getPage(siteId, pageId);
     if (!targetPage) {
       return NextResponse.json({ ok: false, error: `Page "${pageId}" not found.` }, { status: 404 });
@@ -223,6 +281,22 @@ export async function DELETE(_request, { params }) {
     for (const id of pageIdsToDelete) {
       await cms.pages.deletePage(siteId, id);
     }
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId: targetPage.workspaceId,
+      actorUserId: user.uid,
+      action: "page.deleted",
+      entityType: "page",
+      entityId: pageId,
+      siteId,
+      pageId,
+      summary: `Deleted page "${targetPage.title || pageId}"`,
+      metadata: {
+        deletedCount: pageIdsToDelete.length,
+        deletedPageIds: pageIdsToDelete,
+      },
+      createdAt: now,
+    });
 
     return NextResponse.json({
       ok: true,

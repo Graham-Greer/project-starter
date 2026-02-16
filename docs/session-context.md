@@ -5,8 +5,8 @@ Use this file to resume work in future chats without losing continuity.
 ## Current Status
 
 - Active roadmap doc: `docs/implementation-checklist.md`
-- Current phase: CMS Phase F in progress (publish flow operational; rollback + cache invalidation pending)
-- Next phase: complete publish hardening (rollback + cache invalidation), then wire registry thumbnails/metadata
+- Current phase: CMS navigation/header milestones complete, live runtime gating operational, publish pipeline with rollback/history complete, and media-library foundation implemented.
+- Next phase: run media QA acceptance pass, then proceed to AI Copilot implementation.
 
 ## Completed So Far
 
@@ -87,7 +87,7 @@ Use this file to resume work in future chats without losing continuity.
     - full-width CMS content canvas with topbar actions
     - sidebar IA split by mode:
       - non-edit mode: Dashboard section (workspace role + switch workspace + add site/page actions)
-      - edit mode: Section library only
+      - edit mode: Page settings controls
     - active workspace + actions merged into a single Dashboard section
     - add-site/add-page/switch-workspace forms render on-demand below Dashboard
     - explicit page edit mode (composer/preview shown only when editing)
@@ -95,6 +95,7 @@ Use this file to resume work in future chats without losing continuity.
     - delete flow now uses reusable confirmation modal component instead of browser confirm
     - page settings includes pre-publish check action with pass/fail checklist feedback
     - page settings includes publish action and status feedback (`draft`/`published`)
+    - page settings now includes unpublish action to revert published pages back to draft state
     - publish now clears page-level `hasUnpublishedChanges` to prevent stale `changes pending` state after republish
     - editing published content now invalidates prior pre-publish success immediately (no page refresh required)
     - page-settings success notices for pre-publish/publish now auto-dismiss after a short delay
@@ -108,8 +109,55 @@ Use this file to resume work in future chats without losing continuity.
     - saving page blocks no longer exits edit mode/composer
     - standard-mode schema coverage expanded across all registry section variants
     - recursive object/array editors added for non-technical nested content editing
+    - required-field contracts refined across all section schemas (top-level + nested object/array item fields)
+    - nested required fields now enforced in API validation and displayed as required in Standard mode forms
+    - guided Standard mode editor now uses `Core content` + `Optional enhancements` with explicit add/remove controls
+    - guided presets now cover all current section variants with section-specific core/optional field ordering
+    - field labels/help text in Standard mode now include user-facing overrides for technical keys (CTA/URL/OG terms)
+    - Standard mode now includes empty-state guidance for list/object editors and consistent add/remove action styling
+    - Standard mode now provides inline field-level validation (required, length/type, URL-like checks)
+    - API block validation errors now map back to inline field messages in Standard mode with user-friendly copy
+    - pre-publish failures now surface as actionable items with jump-to-fix controls in Page Settings
+    - internal schema `id` fields are hidden from Standard mode; list item IDs auto-generate in editor actions
+    - placeholder sentinel defaults removed from editor-generated values; legacy placeholder values sanitized on load/save
+    - canceling a newly-added unsaved section now discards it instead of leaving invalid orphan data
+    - section picker flow moved fully into editor main column:
+      - step 1: section library cards
+      - step 2: variant picker + preview + add action + back action
+      - successful add resets picker back to section library
+      - sidebar edit mode now focuses on Page Settings only
     - variant-picker previews now use example seed data for complete visual representations
     - live preview remains tied to actual draft content state
+    - CMS-powered public runtime route added in parallel namespace:
+      - `src/app/live/[siteSlug]/[[...slug]]/page.jsx`
+      - published snapshot resolver: `src/lib/cms/live-runtime.js`
+      - live SEO metadata now resolved from published snapshot fields
+      - publish/unpublish cache invalidation extended to `/live/[siteSlug]/*`
+    - site-level runtime mode control added:
+      - site contracts include `runtimeMode` (`static` | `cms-live`)
+      - site update endpoint: `PATCH /api/cms/sites/[siteId]`
+      - Dashboard runtime mode selector + update action for selected site
+      - live runtime resolver gated to `cms-live` sites only
+    - navigation/header foundation + CMS IA additions:
+      - site contracts now include normalized `header` + `navigation` configs
+      - server validation/normalization for site header/navigation updates
+      - new CMS Navigation main-panel view (separate from Pages)
+      - sidebar content switch for `Pages` vs `Navigation`
+      - navigation editor supports item CRUD, ordering, visibility, page/url targets, and save/discard feedback
+      - header configuration editor now available in Navigation view:
+        - variant + behavior controls
+        - CTA label/href controls
+        - inline header preview card for guided setup
+      - live runtime now renders CMS-driven site header/navigation on `/live/*`:
+        - base marketing header/scroll button suppressed on live routes
+        - navigation page targets resolved against published snapshot entries
+        - mobile drawer menu behavior enabled on runtime header
+      - pre-publish now validates header/navigation readiness:
+        - header config validation
+        - navigation schema/target integrity checks
+        - actionable “Fix this” flow routes users from Page Settings to Navigation workspace
+      - navigation/header QA acceptance completed and documented:
+        - `docs/cms/cms-navigation-qa-matrix.md`
     - CMS route modularization pass:
       - `src/app/cms/page.jsx` reduced from mixed UI/logic rendering toward orchestration-only composition
       - sidebar split into focused modules: `DashboardPanel`, `DashboardActionPanel`, `PageSettingsPanel`, `SectionLibraryPanel`
@@ -128,9 +176,9 @@ Use this file to resume work in future chats without losing continuity.
 
 ## Next 3 Actions
 
-1. Implement rollback/unpublish workflow on top of immutable snapshots.
-2. Implement live cache invalidation strategy after publish.
-3. Generate and wire registry thumbnails/metadata.
+1. Execute media-library QA matrix: upload/list/update-alt/delete, picker selection, and preview/runtime verification.
+2. Verify storage-rule parity in dev/stage/prod buckets and record outcomes in `docs/cms/cms-media-library-checklist.md`.
+3. Begin AI Copilot implementation in `docs/cms/cms-implementation-checklist.md` Phase F after media QA acceptance is signed off.
 
 ## Key Source-of-Truth Docs
 

@@ -25,6 +25,7 @@ export function useCmsWorkspaceState() {
   const [siteNameInput, setSiteNameInput] = useState("");
   const [siteSlugInput, setSiteSlugInput] = useState("");
   const [siteStatusMessage, setSiteStatusMessage] = useState("");
+  const [isUpdatingSiteRuntime, setIsUpdatingSiteRuntime] = useState(false);
   const [workspaceStatusMessage, setWorkspaceStatusMessage] = useState("");
   const [activeDashboardAction, setActiveDashboardAction] = useState("");
   const [parentPageIdInput, setParentPageIdInput] = useState("");
@@ -33,16 +34,24 @@ export function useCmsWorkspaceState() {
   const [pageSettingsMetaTitleInput, setPageSettingsMetaTitleInput] = useState("");
   const [pageSettingsMetaDescriptionInput, setPageSettingsMetaDescriptionInput] = useState("");
   const [pageSettingsOgImageUrlInput, setPageSettingsOgImageUrlInput] = useState("");
+  const [pageSettingsOgImageAssetIdInput, setPageSettingsOgImageAssetIdInput] = useState("");
   const [moveParentPageIdInput, setMoveParentPageIdInput] = useState("");
   const [pageTreeStatusMessage, setPageTreeStatusMessage] = useState("");
   const [isUpdatingPage, setIsUpdatingPage] = useState(false);
+  const [isUpdatingPageHeader, setIsUpdatingPageHeader] = useState(false);
+  const [pageHeaderStatusMessage, setPageHeaderStatusMessage] = useState("");
   const [didUpdatePage, setDidUpdatePage] = useState(false);
   const [isRunningPrePublishValidation, setIsRunningPrePublishValidation] = useState(false);
   const [prePublishStatusMessage, setPrePublishStatusMessage] = useState("");
   const [prePublishChecks, setPrePublishChecks] = useState([]);
   const [isPublishingPage, setIsPublishingPage] = useState(false);
+  const [isUnpublishingPage, setIsUnpublishingPage] = useState(false);
   const [publishStatusMessage, setPublishStatusMessage] = useState("");
   const [didPublishPage, setDidPublishPage] = useState(false);
+  const [publishHistoryEntries, setPublishHistoryEntries] = useState([]);
+  const [isLoadingPublishHistory, setIsLoadingPublishHistory] = useState(false);
+  const [isRollingBackPublish, setIsRollingBackPublish] = useState(false);
+  const [publishHistoryStatusMessage, setPublishHistoryStatusMessage] = useState("");
 
   return {
     workspaceIdInput,
@@ -71,6 +80,8 @@ export function useCmsWorkspaceState() {
     setSiteSlugInput,
     siteStatusMessage,
     setSiteStatusMessage,
+    isUpdatingSiteRuntime,
+    setIsUpdatingSiteRuntime,
     workspaceStatusMessage,
     setWorkspaceStatusMessage,
     activeDashboardAction,
@@ -87,12 +98,18 @@ export function useCmsWorkspaceState() {
     setPageSettingsMetaDescriptionInput,
     pageSettingsOgImageUrlInput,
     setPageSettingsOgImageUrlInput,
+    pageSettingsOgImageAssetIdInput,
+    setPageSettingsOgImageAssetIdInput,
     moveParentPageIdInput,
     setMoveParentPageIdInput,
     pageTreeStatusMessage,
     setPageTreeStatusMessage,
     isUpdatingPage,
     setIsUpdatingPage,
+    isUpdatingPageHeader,
+    setIsUpdatingPageHeader,
+    pageHeaderStatusMessage,
+    setPageHeaderStatusMessage,
     didUpdatePage,
     setDidUpdatePage,
     isRunningPrePublishValidation,
@@ -103,9 +120,19 @@ export function useCmsWorkspaceState() {
     setPrePublishChecks,
     isPublishingPage,
     setIsPublishingPage,
+    isUnpublishingPage,
+    setIsUnpublishingPage,
     publishStatusMessage,
     setPublishStatusMessage,
     didPublishPage,
     setDidPublishPage,
+    publishHistoryEntries,
+    setPublishHistoryEntries,
+    isLoadingPublishHistory,
+    setIsLoadingPublishHistory,
+    isRollingBackPublish,
+    setIsRollingBackPublish,
+    publishHistoryStatusMessage,
+    setPublishHistoryStatusMessage,
   };
 }

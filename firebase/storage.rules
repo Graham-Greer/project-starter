@@ -15,7 +15,7 @@ service firebase.storage {
         && memberDoc(workspaceId).data.role in roles;
     }
 
-    match /workspaces/{workspaceId}/sites/{siteId}/{allPaths=**} {
+    match /workspaces/{workspaceId}/sites/{siteId}/assets/{allPaths=**} {
       allow read: if hasRole(workspaceId, ["owner", "admin", "editor", "viewer"]);
       allow write: if hasRole(workspaceId, ["owner", "admin", "editor"])
         && request.resource.size < 25 * 1024 * 1024

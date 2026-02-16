@@ -16,6 +16,7 @@ export default function ScrollToTopButton({
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
   const isCmsRoute = pathname?.startsWith("/cms");
+  const isLiveRoute = pathname?.startsWith("/live");
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -41,7 +42,7 @@ export default function ScrollToTopButton({
     });
   };
 
-  if (isCmsRoute) {
+  if (isCmsRoute || isLiveRoute) {
     return null;
   }
 

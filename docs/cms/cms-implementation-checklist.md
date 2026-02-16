@@ -29,12 +29,38 @@ This checklist runs alongside `docs/implementation-checklist.md` and covers the 
 - [x] Implement props schema registry + validation utilities.
 - [x] Build resolver: `sectionType + variant -> component`.
 - [x] Build fallback renderer for unknown/invalid blocks.
-- [ ] Generate and wire registry thumbnails/metadata.
+- [x] Generate and wire registry thumbnails/metadata.
+- [x] Lock header architecture to site config (not section registry blocks):
+  - Header remains managed in Navigation/Header workspace.
+  - Per-page header behavior uses `inherit` or preset override from page settings.
+  - Section registry scope stays focused on page body sections.
 
 ## Phase D: CMS Admin Portal
 
+- [x] Create dedicated editor UX tracker: `docs/cms/cms-editor-ux-checklist.md`.
+- [x] Create dedicated navigation/header tracker: `docs/cms/cms-navigation-checklist.md`.
 - [x] Build site list/create flow.
 - [x] Build page list/create flow.
+- [x] Build dedicated Navigation management screen in CMS main content area:
+  - Sidebar view-switch between `Pages` and `Navigation`.
+  - Navigation item CRUD + ordering + visibility + target type controls.
+  - Save/discard status messaging and first-run empty state guidance.
+- [x] Build Header configuration controls in CMS main content area:
+  - Header variant + behavior controls (`overlayMode`, `sticky`, `mobilePattern`).
+  - Header CTA controls with validated patch persistence.
+  - Header preview card to guide non-technical users.
+- [x] Render CMS-driven runtime header/navigation on `/live/*`:
+  - Base marketing header/scroll-to-top chrome is suppressed on live routes.
+  - Live header resolves from site `header` + `navigation` config.
+  - Page-type nav links resolve through published snapshot page entries.
+  - Live mobile drawer behavior implemented for nav-capable header variants.
+- [x] Add navigation/header pre-publish guardrails:
+  - Pre-publish now validates header config and navigation config integrity.
+  - Visible navigation items must resolve to valid page/URL targets.
+  - Pre-publish failures include actionable “Fix this” links to Navigation workspace.
+- [x] Complete navigation/header implementation QA acceptance:
+  - Recorded in `docs/cms/cms-navigation-qa-matrix.md`.
+  - Includes runtime-mode, live-header rendering, pre-publish fix-flow, and RBAC verification.
 - [x] Replace delete-page browser confirms with reusable confirmation modal UX.
 - [x] Add page SEO metadata editing in Page settings:
   - SEO title + description fields in CMS UI.
@@ -50,6 +76,7 @@ This checklist runs alongside `docs/implementation-checklist.md` and covers the 
   - Page clone flow (duplicate draft page with copied blocks/SEO under same parent).
   - Page settings update flow for title, slug, and parent in a single action.
 - [x] Build block composer (add/reorder/remove blocks).
+  - Section delete now uses reusable confirmation modal and persists immediately on confirm.
 - [x] Build block props editor from schema definitions.
 - [x] Build live preview panel (desktop/tablet/mobile + theme).
 - [x] Add non-technical editing UX:
@@ -59,7 +86,8 @@ This checklist runs alongside `docs/implementation-checklist.md` and covers the 
   - Two-column workspace + editor shell.
   - Side-by-side library/composer and props/reference panels.
   - CMS-specific topbar/sidebar shell with full-width canvas and contextual forms.
-  - Sidebar IA updated to Dashboard mode (workspace/site/page actions) vs Edit mode (section library).
+  - Sidebar IA updated to Dashboard mode (workspace/site/page actions) vs Edit mode (page settings only).
+  - Section library + variant picker consolidated into main editor workflow with back navigation.
   - Active workspace + actions merged into a single Dashboard section.
   - Add-site/add-page forms render on-demand below Dashboard.
   - Composer/preview panels gated behind explicit page edit mode.
@@ -85,12 +113,31 @@ This checklist runs alongside `docs/implementation-checklist.md` and covers the 
   - Nested object + array field editing (actions, media, plans, testimonials, team members, footer columns/links).
   - Dynamic key/value object editing for dictionary-style props (e.g. comparison row values).
   - Schema-driven select options and deeper nested validation contracts.
+  - Required-field contracts aligned across section schemas (including nested object/array item required fields).
+  - Nested required fields now enforced server-side and surfaced in Standard mode labels.
+  - Guided Standard mode flow implemented: `Core content` always visible, `Optional enhancements` shown via explicit add/remove actions.
+  - Standard mode hides internal schema `id` fields and auto-generates list-item IDs for non-technical users.
+  - Standard mode no longer seeds placeholder content; optional fields initialize empty and legacy placeholder values are sanitized.
+  - Newly added unsaved sections are discarded on cancel; only one in-progress unsaved new section is allowed at a time.
 - [x] Implement variant-picker example previews:
   - Add registry preview seed payloads per section variant.
   - Merge schema defaults + preview seeds for complete variant representations.
   - Keep live preview bound to actual draft page content.
+- [x] Improve editor validation and publish guidance UX:
+  - Inline field-level validation in Standard mode (required, type/length constraints, URL-like fields).
+  - API block validation errors mapped back to field paths with user-friendly inline copy.
+  - Pre-publish failures now render actionable fix items in Page Settings with jump-to-field/section actions.
 
-## Phase E: AI Copilot
+## Phase E: Media Library Foundation (Pre-AI Dependency)
+
+- [x] Create dedicated media-library tracker: `docs/cms/cms-media-library-checklist.md`.
+- [x] Implement workspace-scoped media asset model and APIs.
+- [x] Implement secure Firebase Storage upload/list/delete flow with RBAC and validation.
+- [x] Build CMS Media library view in main content panel.
+- [x] Build reusable media picker for header/logo, section media fields, and SEO OG image selection.
+- [x] Ensure preview/live runtime resolve selected media assets correctly.
+
+## Phase F: AI Copilot (After Media Library Foundation)
 
 - [ ] Implement AI run service (structured input/output contracts).
 - [ ] Build page draft generation flow.
@@ -98,28 +145,68 @@ This checklist runs alongside `docs/implementation-checklist.md` and covers the 
 - [ ] Build SEO assist flow.
 - [ ] Build proposal diff/review/apply UI.
 
-## Phase F: Publish Pipeline
+## Phase G: Publish Pipeline
 
-- [ ] Implement draft save + autosave behaviors.
+- [x] Implement draft save + autosave behaviors.
+  - Debounced autosave now persists block draft edits while in page edit mode.
+  - Manual save remains available for explicit commit control.
 - [x] Implement pre-publish validators.
 - [x] Implement immutable page/site snapshot creation.
-- [x] Implement publish action (rollback pending).
+- [x] Implement publish action + rollback/history.
   - Published pages keep status and use `hasUnpublishedChanges` for republish readiness.
   - Publish now explicitly clears page `hasUnpublishedChanges` so status returns to `Published` after republish.
   - Editing a published page now invalidates prior pre-publish success state immediately (run-check button reappears without refresh).
   - Pre-publish/publish success notices in Page settings auto-dismiss to keep panel feedback clean.
   - Saving blocks keeps editor in page edit mode (does not collapse back to Pages list).
-- [ ] Implement live cache invalidation strategy.
+  - Unpublish action now available in Page settings (`DELETE /publish`) to return a page to draft and refresh site snapshot pointers.
+  - Publish history now available in Page settings via `GET /publish/history` (latest versions list).
+  - Rollback-to-version now available in Page settings via `POST /publish/rollback`.
+  - Rollback creates a new immutable published version and site snapshot (history-preserving rollback, not in-place mutation).
+- [x] Implement live cache invalidation strategy.
+  - Added publish-cache invalidation utility in `src/lib/cms/publish-cache.js`.
+  - Publish/unpublish now trigger tag + path invalidation in `src/app/api/cms/sites/[siteId]/pages/[pageId]/publish/route.js`.
+  - Strategy covers site-level, page-level, and path-level invalidation keys to support live runtime caching patterns.
 
-## Phase G: Reliability + Operations
+## Phase G.5: Public Runtime Integration
 
-- [ ] Add audit logs for edit/publish events.
+- [x] Implement CMS-powered public runtime route in parallel namespace (`/live/[siteSlug]/[[...slug]]`).
+- [x] Implement published-page resolver service (`site -> snapshot -> pageVersion -> page payload`).
+- [x] Implement live runtime metadata from published SEO snapshot fields.
+- [x] Keep existing static routes as fallback during rollout (no regression path).
+- [x] Extend publish/unpublish invalidation to cover live runtime paths (`/live/[siteSlug]/*`).
+- [x] Add site-level runtime-mode switch (`static` vs `cms-live`) for controlled adoption.
+  - Added `runtimeMode` to site API contracts (`/api/cms/workspaces/[workspaceId]/sites`).
+  - Added site update endpoint `PATCH /api/cms/sites/[siteId]`.
+  - Added Dashboard control to switch selected site between `Static` and `CMS live`.
+  - Live runtime resolver now serves only sites explicitly set to `cms-live`.
+
+## Phase H: Reliability + Operations
+
+- [x] Add audit logs for edit/publish events.
+  - Added workspace-scoped audit log data layer (`workspaces/{workspaceId}/auditLogs`).
+  - Mutation routes now write audit events (site/page create/update/delete, blocks save, publish/unpublish/rollback, clone).
+  - Added read endpoint: `GET /api/cms/workspaces/[workspaceId]/audit-logs`.
+  - Added CMS main-content Activity view with refresh + action/page filtering.
+  - Added Activity quick presets (`Publishing`, `Content edits`, `Site config`) and row deep-link actions.
+  - Added actor resolution in audit rows (label/email fallback instead of raw UID where available).
 - [ ] Add analytics on AI usage and publish outcomes.
-- [ ] Add rate limits and quotas per workspace.
-- [ ] Add backup/export strategy for site content.
-- [ ] Add monitoring/alerting for publish failures.
+- [x] Add rate limits and quotas per workspace.
+  - Added reusable server-side rate limiting utility in `src/lib/cms/rate-limit.js`.
+  - Applied rate limits to publish/unpublish/rollback routes with standardized `429` + `Retry-After`.
+  - Added reusable workspace daily quota utility in `src/lib/cms/quota.js`.
+  - Applied daily quotas to publish/unpublish/rollback routes with standardized `429` responses (`code`, `action`, `limit`, `resetAt`).
+- [x] Add backup/export strategy for site content.
+  - Added workspace export endpoint: `GET /api/cms/workspaces/[workspaceId]/export`.
+  - Supports optional site-scoped export via `?siteId=...`.
+  - Export bundle includes workspace, sites, pages, pageVersions, siteSnapshots, summary metadata, schema version, and generated timestamp.
+  - Export responses are downloadable JSON attachments and are audit-logged (`workspace.exported`).
+- [x] Add monitoring/alerting for publish failures.
+  - Added workspace alerts data layer (`workspaces/{workspaceId}/alerts`) and secure alerts API (`GET /api/cms/workspaces/[workspaceId]/alerts`).
+  - Publish/unpublish/rollback routes now create structured failure alerts with reason codes.
+  - Added CMS Alerts main-panel view with filtering and deep-link open actions.
+  - Added automatic alert resolution on successful publish/unpublish/rollback for the same page.
 
-## Phase H: White-label + Template Expansion
+## Phase I: White-label + Template Expansion
 
 - [ ] Add template registry and template picker UX.
 - [ ] Add brand token manager (colors/fonts/logo) and validation.

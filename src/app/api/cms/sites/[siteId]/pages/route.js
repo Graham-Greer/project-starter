@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { ForbiddenError, UnauthorizedError } from "@/lib/auth";
+import { ForbiddenError, UnauthorizedError, getRequestUser } from "@/lib/auth";
+import { safeWriteCmsAuditLog } from "@/lib/cms/audit-log";
 import { createSecureCmsDataServices } from "@/lib/data";
 
 function toSlug(value = "") {
@@ -50,7 +51,10 @@ function toPageResponse(page) {
       metaTitle: page?.seo?.metaTitle || page.title || "",
       metaDescription: page?.seo?.metaDescription || "",
       ogImageUrl: page?.seo?.ogImageUrl || "",
+      ogImageAssetId: page?.seo?.ogImageAssetId || "",
     },
+    headerMode: page?.headerMode === "override" ? "override" : "inherit",
+    headerPresetId: typeof page?.headerPresetId === "string" ? page.headerPresetId : "",
     status: page.status,
     hasUnpublishedChanges: Boolean(page?.hasUnpublishedChanges),
     draftVersion: page.draftVersion,
@@ -162,6 +166,7 @@ export async function POST(request, { params }) {
     const parentPageId = typeof payload.parentPageId === "string" && payload.parentPageId.trim()
       ? payload.parentPageId.trim()
       : null;
+    const user = await getRequestUser({ required: true });
 
     let parentPage = null;
     if (parentPageId) {
@@ -197,15 +202,35 @@ export async function POST(request, { params }) {
         metaTitle: payload.title.trim(),
         metaDescription: "",
         ogImageUrl: "",
+        ogImageAssetId: "",
       },
+      headerMode: "inherit",
+      headerPresetId: "",
       draftVersion: 1,
       hasUnpublishedChanges: true,
       updatedAt: now,
-      updatedBy: "system",
+      updatedBy: user.uid,
     };
 
     await cms.pages.saveDraftPage(siteId, pageId, pagePayload);
     const createdPage = await cms.pages.getPage(siteId, pageId);
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId: site.workspaceId,
+      actorUserId: user.uid,
+      action: "page.created",
+      entityType: "page",
+      entityId: pageId,
+      siteId,
+      pageId,
+      summary: `Created page "${pagePayload.title}"`,
+      metadata: {
+        slug: pagePayload.slug,
+        path: pagePayload.path,
+        parentPageId: pagePayload.parentPageId || "",
+      },
+      createdAt: now,
+    });
 
     return NextResponse.json({ ok: true, page: toPageResponse(createdPage) }, { status: 201 });
   } catch (error) {

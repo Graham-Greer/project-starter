@@ -1,15 +1,19 @@
+const URL_MAX_LENGTH = 4096;
+
 const ACTION_RULE = {
   type: "object",
+  required: ["label", "href"],
   fields: {
     label: { type: "string", maxLength: 80 },
-    href: { type: "string", maxLength: 240 },
+    href: { type: "string", maxLength: URL_MAX_LENGTH },
   },
 };
 
 const IMAGE_RULE = {
   type: "object",
+  required: ["src"],
   fields: {
-    src: { type: "string", maxLength: 400 },
+    src: { type: "string", maxLength: URL_MAX_LENGTH },
     alt: { type: "string", maxLength: 160 },
   },
 };
@@ -18,16 +22,17 @@ const HERO_MEDIA_RULE = {
   type: "object",
   fields: {
     kind: { type: "string", options: ["image", "video"], maxLength: 16 },
-    src: { type: "string", maxLength: 400 },
-    videoSrc: { type: "string", maxLength: 400 },
+    src: { type: "string", maxLength: URL_MAX_LENGTH },
+    videoSrc: { type: "string", maxLength: URL_MAX_LENGTH },
     mimeType: { type: "string", maxLength: 80 },
-    poster: { type: "string", maxLength: 400 },
+    poster: { type: "string", maxLength: URL_MAX_LENGTH },
     alt: { type: "string", maxLength: 160 },
   },
 };
 
 const PLAN_RULE = {
   type: "object",
+  required: ["name", "price", "features", "cta"],
   fields: {
     id: { type: "string", maxLength: 80 },
     name: { type: "string", maxLength: 80 },
@@ -43,6 +48,7 @@ const PLAN_RULE = {
 
 const TESTIMONIAL_RULE = {
   type: "object",
+  required: ["quote", "author", "role"],
   fields: {
     id: { type: "string", maxLength: 80 },
     quote: { type: "string", maxLength: 400 },
@@ -54,6 +60,7 @@ const TESTIMONIAL_RULE = {
 
 const FAQ_ITEM_RULE = {
   type: "object",
+  required: ["title", "content"],
   fields: {
     id: { type: "string", maxLength: 80 },
     title: { type: "string", maxLength: 160 },
@@ -63,6 +70,7 @@ const FAQ_ITEM_RULE = {
 
 const TEAM_MEMBER_RULE = {
   type: "object",
+  required: ["name", "role"],
   fields: {
     id: { type: "string", maxLength: 80 },
     name: { type: "string", maxLength: 80 },
@@ -74,6 +82,7 @@ const TEAM_MEMBER_RULE = {
 
 const STATS_ITEM_RULE = {
   type: "object",
+  required: ["value", "label"],
   fields: {
     id: { type: "string", maxLength: 80 },
     value: { type: "string", maxLength: 40 },
@@ -82,8 +91,9 @@ const STATS_ITEM_RULE = {
   },
 };
 
-const COLUMN_RULE = {
+const FOOTER_COLUMN_RULE = {
   type: "object",
+  required: ["title", "links"],
   fields: {
     id: { type: "string", maxLength: 80 },
     label: { type: "string", maxLength: 120 },
@@ -94,7 +104,7 @@ const COLUMN_RULE = {
         type: "object",
         fields: {
           label: { type: "string", maxLength: 120 },
-          href: { type: "string", maxLength: 240 },
+          href: { type: "string", maxLength: URL_MAX_LENGTH },
         },
       },
     },
@@ -103,6 +113,7 @@ const COLUMN_RULE = {
 
 const COMPARISON_ROW_RULE = {
   type: "object",
+  required: ["label", "values"],
   fields: {
     id: { type: "string", maxLength: 80 },
     label: { type: "string", maxLength: 120 },
@@ -112,7 +123,7 @@ const COMPARISON_ROW_RULE = {
 
 export const PROPS_SCHEMAS = {
   "hero.centered.v1": {
-    required: ["title"],
+    required: ["title", "description"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
@@ -123,7 +134,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "hero.split.v1": {
-    required: ["title"],
+    required: ["title", "description", "media"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 320 },
@@ -179,7 +190,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "faq.compact.v1": {
-    required: ["items"],
+    required: ["title", "items"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
@@ -197,7 +208,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "featureSplit.media-left.v1": {
-    required: ["title"],
+    required: ["title", "description", "media"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 280 },
@@ -207,7 +218,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "featureSplit.media-right.v1": {
-    required: ["title"],
+    required: ["title", "description", "media"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 280 },
@@ -217,7 +228,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "cta.centered.v1": {
-    required: ["title"],
+    required: ["title", "primaryAction"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
@@ -227,7 +238,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "cta.split.v1": {
-    required: ["title"],
+    required: ["title", "primaryAction"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },
@@ -245,13 +256,14 @@ export const PROPS_SCHEMAS = {
     },
   },
   "team.lead.v1": {
-    required: ["title", "members"],
+    required: ["title", "lead", "members"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },
       lead: {
         type: "object",
+        required: ["name", "role"],
         fields: {
           name: { type: "string", maxLength: 80 },
           role: { type: "string", maxLength: 120 },
@@ -263,7 +275,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "stats.row.v1": {
-    required: ["items"],
+    required: ["title", "items"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
@@ -272,7 +284,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "stats.cards.v1": {
-    required: ["items"],
+    required: ["title", "items"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
@@ -281,42 +293,65 @@ export const PROPS_SCHEMAS = {
     },
   },
   "featureComparison.compact.v1": {
-    required: ["columns", "rows"],
+    required: ["title", "columns", "rows"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },
-      columns: { type: "array", minLength: 1, item: COLUMN_RULE },
+      columns: {
+        type: "array",
+        minLength: 1,
+        item: {
+          type: "object",
+          required: ["label"],
+          fields: {
+            id: { type: "string", maxLength: 80 },
+            label: { type: "string", maxLength: 120 },
+          },
+        },
+      },
       rows: { type: "array", minLength: 1, item: COMPARISON_ROW_RULE },
     },
   },
   "featureComparison.detailed.v1": {
-    required: ["columns", "rows"],
+    required: ["title", "columns", "rows"],
     fields: {
       eyebrow: { type: "string", maxLength: 80 },
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },
-      columns: { type: "array", minLength: 1, item: COLUMN_RULE },
+      columns: {
+        type: "array",
+        minLength: 1,
+        item: {
+          type: "object",
+          required: ["label"],
+          fields: {
+            id: { type: "string", maxLength: 80 },
+            label: { type: "string", maxLength: 120 },
+          },
+        },
+      },
       rows: { type: "array", minLength: 1, item: COMPARISON_ROW_RULE },
     },
   },
   "footer.simple.v1": {
+    required: ["links"],
     fields: {
-      brand: { type: "string", maxLength: 80 },
       copyright: { type: "string", maxLength: 120 },
-      links: { type: "array", item: ACTION_RULE },
+      links: { type: "array", minLength: 1, item: ACTION_RULE },
     },
   },
   "footer.columns.v1": {
+    required: ["brand", "columns"],
     fields: {
       brand: { type: "string", maxLength: 80 },
       description: { type: "string", maxLength: 220 },
-      columns: { type: "array", item: COLUMN_RULE },
+      columns: { type: "array", minLength: 1, item: FOOTER_COLUMN_RULE },
       legal: { type: "array", item: ACTION_RULE },
     },
   },
   "footerCta.centered.v1": {
-    required: ["title"],
+    required: ["title", "primaryAction"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },
@@ -325,7 +360,7 @@ export const PROPS_SCHEMAS = {
     },
   },
   "footerCta.split.v1": {
-    required: ["title"],
+    required: ["title", "primaryAction"],
     fields: {
       title: { type: "string", maxLength: 120 },
       description: { type: "string", maxLength: 220 },

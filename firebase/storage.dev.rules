@@ -5,7 +5,7 @@ service firebase.storage {
       return request.auth != null;
     }
 
-    match /workspaces/{workspaceId}/sites/{siteId}/{allPaths=**} {
+    match /workspaces/{workspaceId}/sites/{siteId}/assets/{allPaths=**} {
       allow read, write: if isSignedIn();
     }
 

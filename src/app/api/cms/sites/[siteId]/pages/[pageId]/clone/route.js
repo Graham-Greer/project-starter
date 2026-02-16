@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ForbiddenError, UnauthorizedError, getRequestUser } from "@/lib/auth";
+import { safeWriteCmsAuditLog } from "@/lib/cms/audit-log";
 import { createSecureCmsDataServices } from "@/lib/data";
 
 function toSlug(value = "") {
@@ -59,7 +60,10 @@ function toPageResponse(page) {
       metaTitle: page?.seo?.metaTitle || page.title || "",
       metaDescription: page?.seo?.metaDescription || "",
       ogImageUrl: page?.seo?.ogImageUrl || "",
+      ogImageAssetId: page?.seo?.ogImageAssetId || "",
     },
+    headerMode: page?.headerMode === "override" ? "override" : "inherit",
+    headerPresetId: typeof page?.headerPresetId === "string" ? page.headerPresetId : "",
     status: page.status,
     hasUnpublishedChanges: Boolean(page?.hasUnpublishedChanges),
     draftVersion: page.draftVersion,
@@ -111,6 +115,7 @@ export async function POST(_request, { params }) {
         metaTitle: titleCopy,
         metaDescription: "",
         ogImageUrl: "",
+        ogImageAssetId: "",
       },
       draftVersion: 1,
       hasUnpublishedChanges: true,
@@ -119,6 +124,23 @@ export async function POST(_request, { params }) {
     });
 
     const clonedPage = await cms.pages.getPage(siteId, clonedPageId);
+    await safeWriteCmsAuditLog({
+      cms,
+      workspaceId: sourcePage.workspaceId,
+      actorUserId: user.uid,
+      action: "page.cloned",
+      entityType: "page",
+      entityId: clonedPageId,
+      siteId,
+      pageId: clonedPageId,
+      summary: `Cloned page "${sourcePage.title || pageId}"`,
+      metadata: {
+        sourcePageId: pageId,
+        sourceSlug: sourcePage.slug || "",
+        cloneSlug: slug,
+      },
+      createdAt: now,
+    });
     return NextResponse.json({ ok: true, page: toPageResponse(clonedPage) }, { status: 201 });
   } catch (error) {
     if (error instanceof UnauthorizedError) {

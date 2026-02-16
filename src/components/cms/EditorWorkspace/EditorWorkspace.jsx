@@ -1,16 +1,24 @@
 import { Button } from "@/components/ui";
 import BlockPropsEditorPanel from "@/components/cms/EditorWorkspace/BlockPropsEditorPanel";
 import LivePreviewPanel from "@/components/cms/EditorWorkspace/LivePreviewPanel";
+import PageHeaderPanel from "@/components/cms/EditorWorkspace/PageHeaderPanel";
 import PageSectionsPanel from "@/components/cms/EditorWorkspace/PageSectionsPanel";
 import VariantPickerPanel from "@/components/cms/EditorWorkspace/VariantPickerPanel";
 
 export default function EditorWorkspace({
   styles,
   selectedPage,
+  selectedSite,
   onExitEditMode,
+  onUpdatePageHeaderOverride,
+  isUpdatingPageHeader,
+  pageHeaderStatusMessage,
   selectedSectionLabel,
   selectedSectionVariants,
+  sectionTypes,
   newBlockSectionType,
+  onSelectSectionType,
+  getSectionLabel,
   newBlockVariant,
   setNewBlockVariant,
   formatVariantLabel,
@@ -31,7 +39,7 @@ export default function EditorWorkspace({
   onBlockDragEnd,
   selectedBlockId,
   onSelectBlock,
-  onRemoveBlock,
+  onRequestRemoveBlock,
   sectionLabelForType,
   selectedBlock,
   hasUnsavedBlockChanges,
@@ -47,7 +55,9 @@ export default function EditorWorkspace({
   handleResetAdvancedPropsToSchema,
   selectedBlockTemplateJson,
   propsEditorMessage,
+  selectedBlockApiValidationErrors,
   handleSaveBlocks,
+  handleCancelSelectedBlockEdits,
   previewViewport,
   setPreviewViewport,
   previewTheme,
@@ -61,6 +71,16 @@ export default function EditorWorkspace({
           Exit edit mode
         </Button>
       </div>
+
+      <PageHeaderPanel
+        key={`${selectedSite?.id || "site"}:${selectedPage?.id || "page"}`}
+        styles={styles}
+        selectedPage={selectedPage}
+        selectedSite={selectedSite}
+        onUpdatePageHeaderOverride={onUpdatePageHeaderOverride}
+        isUpdatingPageHeader={isUpdatingPageHeader}
+        pageHeaderStatusMessage={pageHeaderStatusMessage}
+      />
 
       <div className={styles.composerGrid}>
         <PageSectionsPanel
@@ -80,7 +100,7 @@ export default function EditorWorkspace({
           onBlockDragEnd={onBlockDragEnd}
           selectedBlockId={selectedBlockId}
           onSelectBlock={onSelectBlock}
-          onRemoveBlock={onRemoveBlock}
+          onRequestRemoveBlock={onRequestRemoveBlock}
           sectionLabelForType={sectionLabelForType}
           formatVariantLabel={formatVariantLabel}
         />
@@ -88,7 +108,10 @@ export default function EditorWorkspace({
           styles={styles}
           selectedSectionLabel={selectedSectionLabel}
           selectedSectionVariants={selectedSectionVariants}
+          sectionTypes={sectionTypes}
           newBlockSectionType={newBlockSectionType}
+          onSelectSectionType={onSelectSectionType}
+          getSectionLabel={getSectionLabel}
           newBlockVariant={newBlockVariant}
           setNewBlockVariant={setNewBlockVariant}
           formatVariantLabel={formatVariantLabel}
@@ -100,8 +123,9 @@ export default function EditorWorkspace({
 
       <BlockPropsEditorPanel
         styles={styles}
+        workspaceId={selectedSite?.workspaceId || ""}
+        siteId={selectedSite?.id || ""}
         selectedBlock={selectedBlock}
-        selectedBlockId={selectedBlockId}
         hasUnsavedBlockChanges={hasUnsavedBlockChanges}
         editorMode={editorMode}
         setEditorMode={setEditorMode}
@@ -115,7 +139,9 @@ export default function EditorWorkspace({
         handleResetAdvancedPropsToSchema={handleResetAdvancedPropsToSchema}
         selectedBlockTemplateJson={selectedBlockTemplateJson}
         propsEditorMessage={propsEditorMessage}
+        selectedBlockApiValidationErrors={selectedBlockApiValidationErrors}
         handleSaveBlocks={handleSaveBlocks}
+        handleCancelSelectedBlockEdits={handleCancelSelectedBlockEdits}
         saveNotice={saveNotice}
       />
 

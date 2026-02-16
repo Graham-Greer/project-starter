@@ -4,6 +4,8 @@ import { getRequestUser, isValidCmsRole, requireWorkspaceRole } from "@/lib/auth
 import { createFirebaseAdapter } from "./adapters/firebase-adapter";
 import {
   createAssetRepository,
+  createAlertRepository,
+  createAuditLogRepository,
   createPageRepository,
   createSiteRepository,
   createSnapshotRepository,
@@ -21,6 +23,8 @@ export function createSecureCmsDataServices({ adapter, resolveUser = getRequestU
     pages: createPageRepository({ adapter: resolvedAdapter }),
     snapshots: createSnapshotRepository({ adapter: resolvedAdapter }),
     assets: createAssetRepository({ adapter: resolvedAdapter }),
+    auditLogs: createAuditLogRepository({ adapter: resolvedAdapter }),
+    alerts: createAlertRepository({ adapter: resolvedAdapter }),
   };
 
   async function getCurrentUser() {
@@ -171,10 +175,50 @@ export function createSecureCmsDataServices({ adapter, resolveUser = getRequestU
         await assertWorkspaceRole(payload.workspaceId, WORKSPACE_WRITE_ROLES);
         return data.assets.createAsset(assetId, payload);
       },
+      async updateAsset(assetId, payload) {
+        const asset = await data.assets.getAssetById(assetId);
+        if (!asset) throw new Error(`Asset "${assetId}" not found`);
+        await assertWorkspaceRole(asset.workspaceId, WORKSPACE_WRITE_ROLES);
+        return data.assets.updateAsset(assetId, payload);
+      },
+      async deleteAsset(assetId) {
+        const asset = await data.assets.getAssetById(assetId);
+        if (!asset) throw new Error(`Asset "${assetId}" not found`);
+        await assertWorkspaceRole(asset.workspaceId, WORKSPACE_WRITE_ROLES);
+        return data.assets.deleteAsset(assetId);
+      },
       async listSiteAssets(siteId) {
         const site = await getSiteOrThrow(siteId);
         await assertWorkspaceRole(site.workspaceId, WORKSPACE_READ_ROLES);
         return data.assets.listSiteAssets(siteId);
+      },
+      async listWorkspaceAssets(workspaceId) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_READ_ROLES);
+        return data.assets.listWorkspaceAssets(workspaceId);
+      },
+    },
+    auditLogs: {
+      async createWorkspaceAuditLog(workspaceId, logId, payload) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_WRITE_ROLES);
+        return data.auditLogs.createWorkspaceAuditLog(workspaceId, logId, payload);
+      },
+      async listWorkspaceAuditLogs(workspaceId) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_READ_ROLES);
+        return data.auditLogs.listWorkspaceAuditLogs(workspaceId);
+      },
+    },
+    alerts: {
+      async createWorkspaceAlert(workspaceId, alertId, payload) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_WRITE_ROLES);
+        return data.alerts.createWorkspaceAlert(workspaceId, alertId, payload);
+      },
+      async updateWorkspaceAlert(workspaceId, alertId, payload) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_WRITE_ROLES);
+        return data.alerts.updateWorkspaceAlert(workspaceId, alertId, payload);
+      },
+      async listWorkspaceAlerts(workspaceId) {
+        await assertWorkspaceRole(workspaceId, WORKSPACE_READ_ROLES);
+        return data.alerts.listWorkspaceAlerts(workspaceId);
       },
     },
   };

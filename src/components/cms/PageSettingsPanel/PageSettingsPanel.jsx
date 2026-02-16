@@ -2,6 +2,25 @@ import { useMemo, useState } from "react";
 import { Icon } from "@/components/primitives";
 import { Button } from "@/components/ui";
 
+function getFixTargetForCheck(checkId = "") {
+  if (!checkId) return null;
+  const mapping = {
+    title: { elementId: "page-settings-title", focus: true },
+    slug: { elementId: "page-settings-slug", focus: true },
+    seo: { elementId: "page-settings-seo-title", focus: true },
+    "seo-meta-title": { elementId: "page-settings-seo-title", focus: true },
+    "seo-meta-description": { elementId: "page-settings-seo-description", focus: true },
+    "seo-og-image": { elementId: "page-settings-og-image", focus: true },
+    blocks: { elementId: "page-sections-list", focus: false },
+    "blocks-schema": { elementId: "page-sections-list", focus: false },
+    "header-config": { elementId: "navigation-panel", focus: false, view: "navigation" },
+    "navigation-config": { elementId: "navigation-panel", focus: false, view: "navigation" },
+    "navigation-links": { elementId: "navigation-panel", focus: false, view: "navigation" },
+    "media-assets": { elementId: "media-library", focus: false, view: "media" },
+  };
+  return mapping[checkId] || null;
+}
+
 export default function PageSettingsPanel({
   styles,
   selectedPage,
@@ -17,22 +36,34 @@ export default function PageSettingsPanel({
   onPageSettingsMetaDescriptionChange,
   pageSettingsOgImageUrlInput,
   onPageSettingsOgImageUrlChange,
+  onOpenOgImageMediaPicker,
   onRunPrePublishValidation,
   isRunningPrePublishValidation,
   prePublishStatusMessage,
   prePublishChecks,
   onPublishPage,
   isPublishingPage,
+  onUnpublishPage,
+  isUnpublishingPage,
   publishStatusMessage,
   didPublishPage,
+  publishHistoryEntries,
+  isLoadingPublishHistory,
+  isRollingBackPublish,
+  publishHistoryStatusMessage,
+  onLoadPublishHistory,
+  onRollbackPageVersion,
   moveParentPageIdInput,
   onMoveParentPageIdChange,
   availableParentPages,
   isUpdatingPage,
   didUpdatePage,
+  onOpenNavigationSettings,
+  onOpenMediaLibrary,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showPrePublishDetails, setShowPrePublishDetails] = useState(false);
+  const [isPublishHistoryCollapsed, setIsPublishHistoryCollapsed] = useState(true);
   const isErrorMessage = Boolean(pageTreeStatusMessage) && /(error|failed|invalid|not found|must|cannot|unable|could not)/i.test(pageTreeStatusMessage);
   const hasPrePublishChecks = Array.isArray(prePublishChecks) && prePublishChecks.length > 0;
   const hasPrePublishFailures = useMemo(
@@ -49,10 +80,32 @@ export default function PageSettingsPanel({
       ? "Published (changes pending)"
       : "Published"
     : "Draft";
+  const failedPrePublishChecks = hasPrePublishChecks
+    ? prePublishChecks.filter((check) => check.status !== "pass")
+    : [];
+  const canShowFailureSummary = failedPrePublishChecks.length > 0;
 
   if (!selectedPage) return null;
   const shouldShowPrePublishDetails = hasPrePublishFailures || showPrePublishDetails;
   const contentId = "page-settings-content";
+  const handleJumpToFix = (checkId) => {
+    const target = getFixTargetForCheck(checkId);
+    if (!target?.elementId) return;
+    if (target.view === "navigation" && typeof onOpenNavigationSettings === "function") {
+      onOpenNavigationSettings();
+    }
+    if (target.view === "media" && typeof onOpenMediaLibrary === "function") {
+      onOpenMediaLibrary();
+    }
+    window.setTimeout(() => {
+      const node = document.getElementById(target.elementId);
+      if (!node) return;
+      node.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (target.focus && typeof node.focus === "function") {
+        window.setTimeout(() => node.focus(), 220);
+      }
+    }, target.view === "navigation" || target.view === "media" ? 60 : 0);
+  };
 
   return (
     <section id="page-settings" className={styles.panel}>
@@ -81,6 +134,7 @@ export default function PageSettingsPanel({
             <label className={styles.label}>
               Page title
               <input
+                id="page-settings-title"
                 className={styles.input}
                 type="text"
                 value={pageSettingsTitleInput}
@@ -91,6 +145,7 @@ export default function PageSettingsPanel({
             <label className={styles.label}>
               Page slug
               <input
+                id="page-settings-slug"
                 className={styles.input}
                 type="text"
                 value={pageSettingsSlugInput}
@@ -101,6 +156,7 @@ export default function PageSettingsPanel({
             <label className={styles.label}>
               SEO title
               <input
+                id="page-settings-seo-title"
                 className={styles.input}
                 type="text"
                 value={pageSettingsMetaTitleInput}
@@ -115,6 +171,7 @@ export default function PageSettingsPanel({
             <label className={styles.label}>
               SEO description
               <textarea
+                id="page-settings-seo-description"
                 className={styles.textarea}
                 value={pageSettingsMetaDescriptionInput}
                 onChange={(event) => onPageSettingsMetaDescriptionChange(event.target.value)}
@@ -128,6 +185,7 @@ export default function PageSettingsPanel({
             <label className={styles.label}>
               OG image URL
               <input
+                id="page-settings-og-image"
                 className={styles.input}
                 type="url"
                 value={pageSettingsOgImageUrlInput}
@@ -138,6 +196,11 @@ export default function PageSettingsPanel({
               <span className={styles.helpText}>
                 Public `https://` image URL used for social sharing cards (recommended 1200x630).
               </span>
+              <div className={styles.row}>
+                <Button type="button" size="sm" variant="secondary" onClick={onOpenOgImageMediaPicker}>
+                  Choose from media library
+                </Button>
+              </div>
             </label>
             <label className={styles.label}>
               Parent page
@@ -167,13 +230,101 @@ export default function PageSettingsPanel({
             {prePublishStatusMessage ? (
               <p className={/passed/i.test(prePublishStatusMessage) ? styles.status : styles.error}>{prePublishStatusMessage}</p>
             ) : null}
+            {canShowFailureSummary ? (
+              <div className={styles.errorNotice}>
+                <p className={styles.listTitle}>Issues to resolve before publish</p>
+                <ul className={styles.list}>
+                  {failedPrePublishChecks.map((check) => (
+                    <li key={`prepublish-failure-${check.id}`} className={styles.listItem}>
+                      <p className={styles.listTitle}>{check.label}</p>
+                      <p className={styles.helpText}>{check.message}</p>
+                      {getFixTargetForCheck(check.id) ? (
+                        <div className={styles.row}>
+                          <Button type="button" size="sm" variant="secondary" onClick={() => handleJumpToFix(check.id)}>
+                            Fix this
+                          </Button>
+                        </div>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             {canPublishNow ? (
               <Button type="button" size="sm" onClick={onPublishPage} loading={isPublishingPage}>
                 {isPublishingPage ? "Publishing..." : didPublishPage ? "Published" : publishButtonLabel}
               </Button>
             ) : null}
+            {isPublished ? (
+              <Button type="button" size="sm" variant="secondary" tone="danger" onClick={onUnpublishPage} loading={isUnpublishingPage}>
+                {isUnpublishingPage ? "Unpublishing..." : "Unpublish"}
+              </Button>
+            ) : null}
             {publishStatusMessage ? (
               <p className={/published/i.test(publishStatusMessage) ? styles.status : styles.error}>{publishStatusMessage}</p>
+            ) : null}
+            <div className={styles.row}>
+              <Button
+                type="button"
+                size="sm"
+                variant="tertiary"
+                onClick={() => setIsPublishHistoryCollapsed((prev) => !prev)}
+              >
+                {isPublishHistoryCollapsed ? "Show publish history" : "Hide publish history"}
+                <Icon
+                  name={isPublishHistoryCollapsed ? "chevronDown" : "chevronUp"}
+                  size="1rem"
+                  className={styles.panelCollapseIcon}
+                  decorative={true}
+                />
+              </Button>
+            </div>
+            {!isPublishHistoryCollapsed ? (
+              <>
+                <div className={styles.row}>
+                  <Button type="button" size="sm" variant="secondary" onClick={onLoadPublishHistory} loading={isLoadingPublishHistory}>
+                    {isLoadingPublishHistory ? "Loading history..." : "Refresh publish history"}
+                  </Button>
+                </div>
+                {publishHistoryStatusMessage ? (
+                  <p className={/failed|error|invalid|not found/i.test(publishHistoryStatusMessage) ? styles.error : styles.status}>
+                    {publishHistoryStatusMessage}
+                  </p>
+                ) : null}
+                {Array.isArray(publishHistoryEntries) && publishHistoryEntries.length > 0 ? (
+                  <ul className={styles.list}>
+                    {publishHistoryEntries.map((entry) => (
+                      <li key={`publish-history-${entry.id}`} className={styles.listItem}>
+                        <p className={styles.listTitle}>
+                          {entry.title || "Untitled version"}
+                          {" - "}
+                          <span className={styles.helpText}>
+                            {entry.publishedAt ? new Date(entry.publishedAt).toLocaleString() : "Unknown date"}
+                          </span>
+                        </p>
+                        <p className={styles.helpText}>Version ID: {entry.id}</p>
+                        <p className={styles.helpText}>Path: {entry.path || "/"}</p>
+                        <div className={styles.row}>
+                          {entry.isCurrentPublishedVersion ? (
+                            <span className={styles.status}>Current published version</span>
+                          ) : (
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => onRollbackPageVersion(entry.id)}
+                              loading={isRollingBackPublish}
+                              disabled={isRollingBackPublish}
+                            >
+                              {isRollingBackPublish ? "Rolling back..." : "Rollback to this version"}
+                            </Button>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </>
             ) : null}
             {hasPrePublishChecks && !hasPrePublishFailures ? (
               <div className={styles.row}>

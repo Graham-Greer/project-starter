@@ -18,10 +18,18 @@ export default function PageSectionsPanel({
   onBlockDragEnd,
   selectedBlockId,
   onSelectBlock,
-  onRemoveBlock,
+  onRequestRemoveBlock,
   sectionLabelForType,
   formatVariantLabel,
 }) {
+  const handleEditSection = (blockId) => {
+    onSelectBlock(blockId);
+    window.requestAnimationFrame(() => {
+      const editor = document.getElementById("block-editor");
+      editor?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   return (
     <section id="page-sections-list" className={styles.panel}>
       <div className={styles.pageSectionHeader}>
@@ -66,7 +74,7 @@ export default function PageSectionsPanel({
                       size="sm"
                       variant={selectedBlockId === block.id ? "primary" : "secondary"}
                       iconOnly
-                      onClick={() => onSelectBlock(block.id)}
+                      onClick={() => handleEditSection(block.id)}
                       aria-label={selectedBlockId === block.id ? "Editing section" : "Edit section"}
                       title={selectedBlockId === block.id ? "Editing" : "Edit"}
                       iconLeft={<Icon name="edit" size="1rem" decorative={true} />}
@@ -76,7 +84,7 @@ export default function PageSectionsPanel({
                       variant="secondary"
                       tone="danger"
                       iconOnly
-                      onClick={() => onRemoveBlock(block.id)}
+                      onClick={() => onRequestRemoveBlock(block)}
                       aria-label="Remove section"
                       title="Remove"
                       iconLeft={<Icon name="trash" size="1rem" decorative={true} />}

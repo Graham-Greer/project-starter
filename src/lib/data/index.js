@@ -1,6 +1,8 @@
 import { createFirebaseAdapter } from "./adapters/firebase-adapter";
 import {
   createAssetRepository,
+  createAlertRepository,
+  createAuditLogRepository,
   createPageRepository,
   createSiteRepository,
   createSnapshotRepository,
@@ -15,6 +17,8 @@ export function createDataServices({ adapter = createFirebaseAdapter() } = {}) {
     pages: createPageRepository({ adapter }),
     snapshots: createSnapshotRepository({ adapter }),
     assets: createAssetRepository({ adapter }),
+    auditLogs: createAuditLogRepository({ adapter }),
+    alerts: createAlertRepository({ adapter }),
   };
 }
 

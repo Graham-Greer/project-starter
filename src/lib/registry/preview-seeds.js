@@ -291,7 +291,6 @@ const PREVIEW_SEEDS = {
   },
   footer: {
     simple: {
-      brand: "Starter",
       copyright: "© 2026 Starter. All rights reserved.",
       links: [
         { label: "Privacy", href: "/privacy" },

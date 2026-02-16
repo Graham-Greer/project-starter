@@ -13,6 +13,7 @@ import styles from "./header.module.css";
 export default function Header() {
   const pathname = usePathname();
   const isCmsRoute = pathname?.startsWith("/cms");
+  const isLiveRoute = pathname?.startsWith("/live");
   const [menuState, setMenuState] = useState({
     isOpen: false,
     openedOnPathname: null,
@@ -42,7 +43,7 @@ export default function Header() {
     };
   }, [isOpen]);
 
-  if (isCmsRoute) {
+  if (isCmsRoute || isLiveRoute) {
     return null;
   }
 

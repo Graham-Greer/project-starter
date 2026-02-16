@@ -7,6 +7,7 @@ export function useCmsBlocksEditor() {
   const [isSavingBlocks, setIsSavingBlocks] = useState(false);
   const [blockStatusMessage, setBlockStatusMessage] = useState("");
   const [saveNotice, setSaveNotice] = useState({ type: "", message: "" });
+  const [blockValidationErrorsById, setBlockValidationErrorsById] = useState({});
   const [selectedBlockId, setSelectedBlockId] = useState("");
   const [draggedBlockId, setDraggedBlockId] = useState("");
   const [dragOverBlockId, setDragOverBlockId] = useState("");
@@ -30,6 +31,8 @@ export function useCmsBlocksEditor() {
     setBlockStatusMessage,
     saveNotice,
     setSaveNotice,
+    blockValidationErrorsById,
+    setBlockValidationErrorsById,
     selectedBlockId,
     setSelectedBlockId,
     draggedBlockId,

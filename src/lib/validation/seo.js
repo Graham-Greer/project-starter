@@ -8,10 +8,16 @@ export function isHttpsUrl(value = "") {
   }
 }
 
+export function isInternalMediaPath(value = "") {
+  const normalized = typeof value === "string" ? value.trim() : "";
+  return normalized.startsWith("/live/") && normalized.includes("/images/");
+}
+
 export function validateSeoPayload(seo = {}) {
   const metaTitle = typeof seo?.metaTitle === "string" ? seo.metaTitle.trim() : "";
   const metaDescription = typeof seo?.metaDescription === "string" ? seo.metaDescription.trim() : "";
   const ogImageUrl = typeof seo?.ogImageUrl === "string" ? seo.ogImageUrl.trim() : "";
+  const ogImageAssetId = typeof seo?.ogImageAssetId === "string" ? seo.ogImageAssetId.trim() : "";
 
   if (metaTitle.length > 70) {
     return { valid: false, error: "SEO title must be 70 characters or fewer." };
@@ -22,8 +28,8 @@ export function validateSeoPayload(seo = {}) {
   if (ogImageUrl.length > 2048) {
     return { valid: false, error: "OG image URL must be 2048 characters or fewer." };
   }
-  if (ogImageUrl && !isHttpsUrl(ogImageUrl)) {
-    return { valid: false, error: "OG image URL must use https." };
+  if (ogImageUrl && !isHttpsUrl(ogImageUrl) && !isInternalMediaPath(ogImageUrl)) {
+    return { valid: false, error: "OG image URL must use https (or be a CMS media URL)." };
   }
 
   return {
@@ -32,6 +38,7 @@ export function validateSeoPayload(seo = {}) {
       metaTitle,
       metaDescription,
       ogImageUrl,
+      ogImageAssetId,
     },
   };
 }

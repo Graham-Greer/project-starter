@@ -15,6 +15,7 @@ export function useCmsWorkspacePageActions({
   pageSettingsMetaTitleInput,
   pageSettingsMetaDescriptionInput,
   pageSettingsOgImageUrlInput,
+  pageSettingsOgImageAssetIdInput,
   moveParentPageIdInput,
   pageListPage,
   pageListPageSize,
@@ -31,6 +32,7 @@ export function useCmsWorkspacePageActions({
   setIsEditingPage,
   setWorkspaceStatusMessage,
   setSiteStatusMessage,
+  setIsUpdatingSiteRuntime,
   setPageStatusMessage,
   setSitePagesMap,
   setPagedPageRows,
@@ -47,15 +49,23 @@ export function useCmsWorkspacePageActions({
   setPageTreeStatusMessage,
   setDidUpdatePage,
   setIsUpdatingPage,
+  setIsUpdatingPageHeader,
+  setPageHeaderStatusMessage,
   setIsRunningPrePublishValidation,
   setPrePublishStatusMessage,
   setPrePublishChecks,
   setIsPublishingPage,
+  setIsUnpublishingPage,
   setPublishStatusMessage,
   setDidPublishPage,
+  setPublishHistoryEntries,
+  setIsLoadingPublishHistory,
+  setIsRollingBackPublish,
+  setPublishHistoryStatusMessage,
   setIsLoadingPageList,
   setPageListPage,
   setActiveDashboardAction,
+  setPreviewRefreshNonce,
 }) {
   const loadPages = useCallback(async (siteId) => {
     if (!siteId) return;
@@ -285,6 +295,86 @@ export function useCmsWorkspacePageActions({
     setSelectedSiteId,
   ]);
 
+  const handleUpdateSiteRuntimeMode = useCallback(async (runtimeMode) => {
+    if (!selectedSiteId) return;
+    setIsUpdatingSiteRuntime(true);
+    setSiteStatusMessage("");
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ runtimeMode }),
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        setSiteStatusMessage(payload?.error || "Failed to update runtime mode.");
+        return;
+      }
+
+      if (payload?.site?.id) {
+        setSites((prev) => prev.map((site) => (site.id === payload.site.id ? { ...site, ...payload.site } : site)));
+      }
+      setSiteStatusMessage(`Runtime mode updated: ${payload?.site?.runtimeMode || runtimeMode}.`);
+    } catch (_error) {
+      setSiteStatusMessage("Failed to update runtime mode.");
+    } finally {
+      setIsUpdatingSiteRuntime(false);
+    }
+  }, [selectedSiteId, setIsUpdatingSiteRuntime, setSiteStatusMessage, setSites]);
+
+  const handleUpdateSiteNavigation = useCallback(async (navigation) => {
+    if (!selectedSiteId) {
+      return { ok: false, error: "Select a site before saving navigation." };
+    }
+
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ navigation }),
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        return { ok: false, error: payload?.error || "Failed to save navigation." };
+      }
+
+      if (payload?.site?.id) {
+        setSites((prev) => prev.map((site) => (site.id === payload.site.id ? { ...site, ...payload.site } : site)));
+      }
+      return { ok: true, site: payload.site };
+    } catch (_error) {
+      return { ok: false, error: "Failed to save navigation." };
+    }
+  }, [selectedSiteId, setSites]);
+
+  const handleUpdateSiteHeader = useCallback(async (headerPayload) => {
+    if (!selectedSiteId) {
+      return { ok: false, error: "Select a site before saving header settings." };
+    }
+
+    try {
+      const payloadToSend = headerPayload && typeof headerPayload === "object" && !Array.isArray(headerPayload)
+        ? headerPayload
+        : { header: headerPayload };
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadToSend),
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        return { ok: false, error: payload?.error || "Failed to save header settings." };
+      }
+
+      if (payload?.site?.id) {
+        setSites((prev) => prev.map((site) => (site.id === payload.site.id ? { ...site, ...payload.site } : site)));
+      }
+      return { ok: true, site: payload.site };
+    } catch (_error) {
+      return { ok: false, error: "Failed to save header settings." };
+    }
+  }, [selectedSiteId, setSites]);
+
   const handleCreatePage = useCallback(async (event) => {
     event.preventDefault();
     if (!selectedSiteId) return;
@@ -355,6 +445,7 @@ export function useCmsWorkspacePageActions({
             metaTitle: pageSettingsMetaTitleInput,
             metaDescription: pageSettingsMetaDescriptionInput,
             ogImageUrl: pageSettingsOgImageUrlInput,
+            ogImageAssetId: pageSettingsOgImageAssetIdInput,
           },
           parentPageId: moveParentPageIdInput || null,
         }),
@@ -396,6 +487,7 @@ export function useCmsWorkspacePageActions({
     pageListPageSize,
     pageSettingsSlugInput,
     pageSettingsMetaDescriptionInput,
+    pageSettingsOgImageAssetIdInput,
     pageSettingsMetaTitleInput,
     pageSettingsOgImageUrlInput,
     pageSettingsTitleInput,
@@ -408,6 +500,52 @@ export function useCmsWorkspacePageActions({
     setPrePublishChecks,
     setPrePublishStatusMessage,
     setPublishStatusMessage,
+    setSitePagesMap,
+  ]);
+
+  const handleUpdatePageHeaderOverride = useCallback(async ({ headerMode, headerPresetId }) => {
+    if (!selectedSiteId || !selectedPageId) {
+      return { ok: false, error: "Select a page before updating header override." };
+    }
+    setPageHeaderStatusMessage("");
+    setIsUpdatingPageHeader(true);
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          headerMode,
+          headerPresetId: headerMode === "override" ? headerPresetId : "",
+        }),
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        setPageHeaderStatusMessage(payload?.error || "Failed to update page header.");
+        return { ok: false, error: payload?.error || "Failed to update page header." };
+      }
+      if (payload?.page?.id) {
+        setSitePagesMap((prev) => ({
+          ...prev,
+          [selectedSiteId]: (prev[selectedSiteId] || []).map((page) =>
+            page.id === payload.page.id ? { ...page, ...payload.page } : page
+          ),
+        }));
+      }
+      setPreviewRefreshNonce((prev) => prev + 1);
+      setPageHeaderStatusMessage("Page header updated.");
+      return { ok: true, page: payload?.page };
+    } catch (_error) {
+      setPageHeaderStatusMessage("Failed to update page header.");
+      return { ok: false, error: "Failed to update page header." };
+    } finally {
+      setIsUpdatingPageHeader(false);
+    }
+  }, [
+    selectedSiteId,
+    selectedPageId,
+    setIsUpdatingPageHeader,
+    setPageHeaderStatusMessage,
+    setPreviewRefreshNonce,
     setSitePagesMap,
   ]);
 
@@ -525,6 +663,33 @@ export function useCmsWorkspacePageActions({
     setPrePublishStatusMessage,
   ]);
 
+  const handleLoadPublishHistory = useCallback(async () => {
+    if (!selectedSiteId || !selectedPageId) return;
+    setIsLoadingPublishHistory(true);
+    setPublishHistoryStatusMessage("");
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/publish/history`);
+      const payload = await response.json();
+      if (!payload?.ok) {
+        setPublishHistoryEntries([]);
+        setPublishHistoryStatusMessage(payload?.error || "Failed to load publish history.");
+        return;
+      }
+      setPublishHistoryEntries(Array.isArray(payload?.versions) ? payload.versions : []);
+    } catch (_error) {
+      setPublishHistoryEntries([]);
+      setPublishHistoryStatusMessage("Failed to load publish history.");
+    } finally {
+      setIsLoadingPublishHistory(false);
+    }
+  }, [
+    selectedSiteId,
+    selectedPageId,
+    setIsLoadingPublishHistory,
+    setPublishHistoryEntries,
+    setPublishHistoryStatusMessage,
+  ]);
+
   const handlePublishPage = useCallback(async () => {
     if (!selectedSiteId || !selectedPageId) return;
     setIsPublishingPage(true);
@@ -559,6 +724,7 @@ export function useCmsWorkspacePageActions({
           ),
         }));
       }
+      await handleLoadPublishHistory();
       await loadPages(selectedSiteId);
       await loadPageList(selectedSiteId, pageListPage, pageListPageSize);
     } catch (_error) {
@@ -569,6 +735,7 @@ export function useCmsWorkspacePageActions({
   }, [
     loadPageList,
     loadPages,
+    handleLoadPublishHistory,
     pageListPage,
     pageListPageSize,
     selectedPageId,
@@ -581,21 +748,127 @@ export function useCmsWorkspacePageActions({
     setPublishStatusMessage,
   ]);
 
+  const handleUnpublishPage = useCallback(async () => {
+    if (!selectedSiteId || !selectedPageId) return;
+    setIsUnpublishingPage(true);
+    setPublishStatusMessage("");
+    setDidPublishPage(false);
+
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/publish`, {
+        method: "DELETE",
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        setPublishStatusMessage(payload?.error || "Failed to unpublish page.");
+        return;
+      }
+
+      setPrePublishChecks([]);
+      setPrePublishStatusMessage("");
+      setPublishStatusMessage("Page unpublished.");
+      if (payload?.page?.id) {
+        setSitePagesMap((prev) => ({
+          ...prev,
+          [selectedSiteId]: (prev[selectedSiteId] || []).map((page) =>
+            page.id === payload.page.id ? { ...page, ...payload.page } : page
+          ),
+        }));
+      }
+      await handleLoadPublishHistory();
+      await loadPages(selectedSiteId);
+      await loadPageList(selectedSiteId, pageListPage, pageListPageSize);
+    } catch (_error) {
+      setPublishStatusMessage("Failed to unpublish page.");
+    } finally {
+      setIsUnpublishingPage(false);
+    }
+  }, [
+    loadPageList,
+    loadPages,
+    handleLoadPublishHistory,
+    pageListPage,
+    pageListPageSize,
+    selectedPageId,
+    selectedSiteId,
+    setDidPublishPage,
+    setIsUnpublishingPage,
+    setSitePagesMap,
+    setPrePublishChecks,
+    setPrePublishStatusMessage,
+    setPublishStatusMessage,
+  ]);
+
+  const handleRollbackPageVersion = useCallback(async (versionId) => {
+    if (!selectedSiteId || !selectedPageId || !versionId) return;
+    setIsRollingBackPublish(true);
+    setPublishStatusMessage("");
+    setPublishHistoryStatusMessage("");
+    setDidPublishPage(false);
+
+    try {
+      const response = await fetch(`/api/cms/sites/${selectedSiteId}/pages/${selectedPageId}/publish/rollback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ versionId }),
+      });
+      const payload = await response.json();
+      if (!payload?.ok) {
+        setPublishStatusMessage(payload?.error || "Failed to rollback publish version.");
+        return;
+      }
+
+      if (payload?.page?.id) {
+        setSitePagesMap((prev) => ({
+          ...prev,
+          [selectedSiteId]: (prev[selectedSiteId] || []).map((page) =>
+            page.id === payload.page.id ? { ...page, ...payload.page } : page
+          ),
+        }));
+      }
+      setDidPublishPage(true);
+      setPublishStatusMessage("Page rollback published.");
+      setPreviewRefreshNonce((prev) => prev + 1);
+      await handleLoadPublishHistory();
+    } catch (_error) {
+      setPublishStatusMessage("Failed to rollback publish version.");
+    } finally {
+      setIsRollingBackPublish(false);
+    }
+  }, [
+    selectedSiteId,
+    selectedPageId,
+    setIsRollingBackPublish,
+    setPublishStatusMessage,
+    setPublishHistoryStatusMessage,
+    setDidPublishPage,
+    setSitePagesMap,
+    setPreviewRefreshNonce,
+    handleLoadPublishHistory,
+  ]);
+
   return {
     loadPages,
     loadPageList,
     loadWorkspace,
     handleWorkspaceSubmit,
     handleCreateSite,
+    handleUpdateSiteHeader,
+    handleUpdateSiteNavigation,
+    handleUpdateSiteRuntimeMode,
     handleSelectSite,
     handleCreatePage,
     handleMovePageParent,
+    handleUpdatePageHeaderOverride,
     handleSelectPage,
     handleEditPage,
     handleToggleDashboardAction,
     handleDeletePage,
     handleClonePage,
     handleRunPrePublishValidation,
+    handleLoadPublishHistory,
     handlePublishPage,
+    handleUnpublishPage,
+    handleRollbackPageVersion,
   };
 }
